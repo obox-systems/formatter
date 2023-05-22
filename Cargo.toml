@@ -1,0 +1,13 @@
+[package]
+name = "formatter"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+itertools = "0.10"
+miette = { version = "5.7", features = ["fancy"] }
+wca = { version = "0.1", git = "https://github.com/Barsik-sus/wTools.git", branch = "ca_dot_command_merged" }
+jwalk = "0.8"
+
+[dev-dependencies]
+expect-test = "1.4"
