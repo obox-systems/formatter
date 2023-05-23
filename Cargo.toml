@@ -10,4 +10,4 @@ wca = { version = "0.1", git = "https://github.com/Barsik-sus/wTools.git", branc
 jwalk = "0.8"
 
 [dev-dependencies]
-expect-test = "1.4"
+pretty_assertions = "1.2"

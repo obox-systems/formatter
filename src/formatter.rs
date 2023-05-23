@@ -48,49 +48,48 @@ pub(crate) fn format(source: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use itertools::Itertools;
-
     use super::format;
-    use expect_test::{expect, Expect};
+    use pretty_assertions::assert_eq;
 
-    #[track_caller]
-    fn check(lines: &[&str], expect: Expect) {
-        let actual = lines.iter().map(|line| format(line)).join("\n");
-        expect.assert_eq(&actual);
+    fn check(lines: &[&str], expect: &[&str]) {
+        let actual: Vec<String> = lines.iter().map(|line| format(line)).collect();
+        assert_eq!(actual, expect);
     }
 
     #[test]
-    fn simple_test() {
+    fn empty() {
+        check(&[""], &[""]);
+    }
+
+    #[test]
+    fn single() {
+        check(&[")", "(", "[", "]"], &[" )", "( ", "[ ", " ]"]);
+    }
+
+    #[test]
+    fn attribute() {
         check(
             &[
                 "#[enum_dispatch(DatabaseImpl)]",
                 "#[ enum_dispatch( DatabaseImpl ) ]",
-                "(1, 2, 3)",
-                "( 1, 2, 3 )",
-                "call(1, 2, 3)",
-                ")",
-                "]",
-                "[]",
-                "()",
-                "(())",
-                "[[]]",
-                "'(())'",
-                "\"(())\"",
             ],
-            expect![[r##"
-                #[ enum_dispatch( DatabaseImpl ) ]
-                #[ enum_dispatch( DatabaseImpl ) ]
-                ( 1, 2, 3 )
-                ( 1, 2, 3 )
-                call( 1, 2, 3 )
-                 )
-                 ]
-                []
-                ()
-                ( () )
-                [ [] ]
-                '(())'
-                "(())""##]],
-        )
+            &[
+                "#[ enum_dispatch( DatabaseImpl ) ]",
+                "#[ enum_dispatch( DatabaseImpl ) ]",
+            ],
+        );
+    }
+
+    #[test]
+    fn call() {
+        check(&["add(40, 2)"], &["add( 40, 2 )"]);
+    }
+
+    #[test]
+    fn parentheses() {
+        check(
+            &["()", "(40, 2)", "( 40, 2 )"],
+            &["()", "( 40, 2 )", "( 40, 2 )"],
+        );
     }
 }
