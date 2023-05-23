@@ -12,7 +12,12 @@ pub(crate) fn format(cx: Context, _args: Args, _props: Props) -> Result {
         Some(path) => {
             for entry in jwalk::WalkDir::new(path) {
                 let entry = entry.into_diagnostic()?;
+
                 let path = entry.path();
+                if path.is_dir() {
+                    continue;
+                }
+
                 let source = std::fs::read_to_string(&path)
                     .into_diagnostic()
                     .with_context(|| format!("reading `{}`", path.display()))?;
