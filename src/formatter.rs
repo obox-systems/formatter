@@ -19,9 +19,9 @@ pub(crate) enum Token {
 
 pub(crate) fn format(source: &str) -> String {
     let mut output = String::new();
-    let mut input = Input::of(source);
+    let input = Input::of(source);
 
-    while let Some(token) = input.next() {
+    for token in input.iter() {
         match token {
             Token::CloseDelimiter
                 if !matches!(input.prev(), Token::OpenDelimiter | Token::Whitespace) =>
@@ -91,5 +91,10 @@ mod tests {
             &["()", "(40, 2)", "( 40, 2 )"],
             &["()", "( 40, 2 )", "( 40, 2 )"],
         );
+    }
+
+    #[test]
+    fn string() {
+        check(&["\"(hello)\""], &["\"(hello)\""]);
     }
 }
