@@ -1,0 +1,176 @@
+use std::cell::Cell;
+
+use super::{classes, cursor::Cursor, Token};
+
+#[derive(Default)]
+pub(crate) struct Input<'me> {
+    pub(crate) pos: Cell<usize>,
+    pub(crate) source: &'me str,
+    pub(crate) tokens: Vec<Token>,
+    pub(crate) start_offsets: Vec<u32>,
+}
+
+impl<'me> Input<'me> {
+    pub(crate) fn of(source: &'me str) -> Self {
+        let mut builder = InputBuilder::new(source);
+        let mut cursor = Cursor::new(source);
+
+        while let Some(first_char) = cursor.shift() {
+            let token = match first_char {
+                '(' | '[' => Token::OpenDelimiter,
+                ')' | ']' => Token::CloseDelimiter,
+                '"' => {
+                    scan_string(first_char, &mut cursor);
+                    Token::String
+                }
+                _ if classes::is_whitespace(first_char) => {
+                    cursor.shift_while(classes::is_whitespace);
+                    Token::Whitespace
+                }
+                _ => Token::Unknown,
+            };
+
+            let len = cursor.reset_len();
+            builder.push(token, len);
+        }
+
+        builder.finish()
+    }
+
+    pub(crate) fn iter(&'me self) -> impl Iterator<Item = Token> + 'me {
+        std::iter::from_fn(|| self.next())
+    }
+
+    pub(crate) fn next(&self) -> Option<Token> {
+        let peeked = self.tokens[self.pos.get()];
+
+        match peeked {
+            Token::Eof => None,
+            _ => {
+                self.pos.set(self.pos.get() + 1);
+                Some(peeked)
+            }
+        }
+    }
+
+    pub(crate) fn peek(&self) -> Token {
+        self.tokens[self.pos.get()]
+    }
+
+    pub(crate) fn prev(&self) -> Token {
+        self.tokens[self.pos.get().saturating_sub(2)]
+    }
+
+    pub(crate) fn span(&self) -> (u32, u32) {
+        let hi = self.start_offsets[self.pos.get()];
+        let lo = self.start_offsets[self.pos.get() - 1];
+
+        (lo, hi)
+    }
+
+    pub(crate) fn slice(&self) -> &str {
+        let (lo, hi) = self.span();
+
+        &self.source[lo as usize..hi as usize]
+    }
+}
+
+#[derive(Default)]
+struct InputBuilder<'me> {
+    input: Input<'me>,
+    offset: u32,
+}
+
+impl<'me> InputBuilder<'me> {
+    fn new(source: &'me str) -> Self {
+        Self {
+            input: Input {
+                source,
+                ..<_>::default()
+            },
+            offset: 0,
+        }
+    }
+
+    fn push(&mut self, kind: Token, len: u32) {
+        self.input.tokens.push(kind);
+        self.input.start_offsets.push(self.offset);
+
+        self.offset += len;
+    }
+
+    fn finish(mut self) -> Input<'me> {
+        self.push(Token::Eof, 0);
+        self.input
+    }
+}
+
+fn scan_string(c: char, cursor: &mut Cursor) {
+    let quote_type = c;
+    while let Some(c) = cursor.peek() {
+        match c {
+            '\\' => {
+                cursor.shift();
+                if cursor.matches('\\') || cursor.matches(quote_type) {
+                    cursor.shift();
+                }
+            }
+            c if c == quote_type => {
+                cursor.shift();
+                return;
+            }
+            _ => {
+                cursor.shift();
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use expect_test::{expect, Expect};
+    use itertools::Itertools;
+
+    use super::Input;
+
+    #[track_caller]
+    fn check(source: &str, expect: Expect) {
+        let input = Input::of(source);
+        let actual = input
+            .iter()
+            .map(|token| format!("{token:?} at {:?}", input.span()))
+            .join("\n");
+        expect.assert_eq(&actual);
+    }
+
+    #[test]
+    fn whitespace() {
+        check("    ", expect!["Whitespace at (0, 4)"]);
+        check("\n  \n  \n", expect!["Whitespace at (0, 7)"]);
+    }
+
+    #[test]
+    fn string() {
+        check(
+            r#"
+            "42"
+            "(42)"
+            'hello'
+            "#,
+            expect![[r#"
+                Whitespace at (0, 13)
+                String at (13, 17)
+                Whitespace at (17, 30)
+                String at (30, 36)
+                Whitespace at (36, 49)
+                Unknown at (49, 50)
+                Unknown at (50, 51)
+                Unknown at (51, 52)
+                Unknown at (52, 53)
+                Unknown at (53, 54)
+                Unknown at (54, 55)
+                Unknown at (55, 56)
+                Whitespace at (56, 69)"#]],
+        );
+    }
+}
