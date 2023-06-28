@@ -22,7 +22,7 @@ impl<'me> Cursor<'me> {
     }
 
     pub(crate) fn shift_while(&mut self, f: impl Fn(char) -> bool + Copy) {
-        while self.peek().map_or(false, f) {
+        while self.peek().is_some_and(f) {
             self.shift();
         }
     }
