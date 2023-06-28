@@ -48,8 +48,45 @@ pub(crate) fn format(source: &str) -> String {
 
 #[cfg(test)]
 mod tests {
+    use std::path::PathBuf;
+
     use super::format;
     use pretty_assertions::assert_eq;
+
+    fn with_extension(path: &PathBuf, extension: &str) -> PathBuf {
+        match path.extension() {
+            Some(raw_extension) => {
+                let mut raw_extension = raw_extension.to_os_string();
+                raw_extension.push(".");
+                raw_extension.push(extension);
+                path.with_extension(raw_extension)
+            }
+            None => path.with_extension(extension),
+        }
+    }
+
+    fn traverse(root: &str, f: impl Fn(PathBuf, PathBuf)) {
+        for entry in std::fs::read_dir(root).unwrap() {
+            let input_path = entry.unwrap().path();
+            let expected_path = with_extension(&input_path, "expected");
+
+            if input_path.extension().unwrap_or_default() == "expected" {
+                continue;
+            };
+
+            f(input_path, expected_path)
+        }
+    }
+
+    #[test]
+    fn tests() {
+        traverse("tests/assets", |input, expected| {
+            let input = format(&std::fs::read_to_string(input).unwrap());
+            let expected = std::fs::read_to_string(expected).unwrap();
+
+            assert_eq!(input, expected);
+        });
+    }
 
     fn check(lines: &[&str], expect: &[&str]) {
         let actual: Vec<String> = lines.iter().map(|line| format(line)).collect();
