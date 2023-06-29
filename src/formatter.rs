@@ -27,42 +27,49 @@ impl Emitter {
     }
 }
 
+impl Emitter {
+    fn before(&mut self, current: Token, input: &Input) {
+        match current {
+            Token::CloseDelimiter(delimiter) => {
+                if input.prev().skip_whitespace(delimiter.into()) {
+                    match delimiter {
+                        Delimiter::Brace => {}
+                        _ => self.whitespace(),
+                    }
+                }
+            }
+            Token::OpenDelimiter(Delimiter::Brace) if input.prev() != Token::Newline => {
+                self.newline()
+            }
+            _ if current.is_operator() && input.prev() != Token::Whitespace => self.whitespace(),
+            _ => {}
+        }
+    }
+
+    fn after(&mut self, current: Token, input: &Input) {
+        match current {
+            Token::OpenDelimiter(delimiter) => match delimiter {
+                Delimiter::Paren | Delimiter::Bracket
+                    if input.peek().skip_whitespace(delimiter.into()) =>
+                {
+                    self.whitespace();
+                }
+                _ => {}
+            },
+            _ if current.is_operator() && input.peek() != Token::Whitespace => self.whitespace(),
+            _ => (),
+        }
+    }
+}
+
 pub(crate) fn format(source: &str) -> String {
     let input = Input::of(source);
     let mut emitter = Emitter::default();
 
     for token in input.iter() {
-        match token {
-            Token::CloseDelimiter(delimiter) => {
-                if input.prev().skip_whitespace(delimiter.into()) {
-                    match delimiter {
-                        Delimiter::Brace => {}
-                        _ => emitter.whitespace(),
-                    }
-                }
-            }
-            _ if token.is_operator() && input.prev() != Token::Whitespace => emitter.whitespace(),
-            _ => (),
-        }
-
-        if token == Token::OpenDelimiter(Delimiter::Brace) && input.prev() != Token::Newline {
-            emitter.newline()
-        }
-
+        emitter.before(token, &input);
         emitter.raw(input.slice());
-
-        match token {
-            Token::OpenDelimiter(delimiter) => match delimiter {
-                Delimiter::Paren | Delimiter::Bracket
-                    if input.peek().skip_whitespace(delimiter.into()) =>
-                {
-                    emitter.whitespace();
-                }
-                _ => {}
-            },
-            _ if token.is_operator() && input.peek() != Token::Whitespace => emitter.whitespace(),
-            _ => (),
-        }
+        emitter.after(token, &input);
     }
 
     emitter.finish()
