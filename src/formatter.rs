@@ -42,9 +42,16 @@ pub(crate) enum Token {
     Newline,
     /// Unknown symbol
     Unknown,
+
     // operators
+    /// `=`
+    Eq,
+    /// `==`
+    EqEq,
     /// `+`
     Plus,
+    /// `++`
+    PlusPlus,
     /// `-`
     Minus,
     /// `/`
@@ -59,7 +66,16 @@ pub(crate) enum Token {
 impl Token {
     /// Checks whether the token is an operator.
     fn is_operator(&self) -> bool {
-        matches!(self, Self::Plus | Self::Minus | Self::Slash | Self::Star)
+        matches!(
+            self,
+            Self::Plus
+                | Self::PlusPlus
+                | Self::Eq
+                | Self::EqEq
+                | Self::Minus
+                | Self::Slash
+                | Self::Star
+        )
     }
 }
 

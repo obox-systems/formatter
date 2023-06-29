@@ -21,6 +21,17 @@ impl<'me> Cursor<'me> {
         self.chars.next()
     }
 
+    /// Checks if the given character `ch` is present in the current state of `self`.
+    /// If `ch` is present, shifts the internal state of `self` and returns `true`,
+    /// otherwise returns `false`.
+    pub(crate) fn shift_if_eq(&mut self, ch: char) -> bool {
+        let is_present = self.matches(ch);
+        if is_present {
+            self.shift();
+        }
+        is_present
+    }
+
     pub(crate) fn shift_while(&mut self, f: impl Fn(char) -> bool + Copy) {
         while self.peek().is_some_and(f) {
             self.shift();
