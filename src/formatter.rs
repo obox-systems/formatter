@@ -77,7 +77,15 @@ pub(crate) fn format(source: &str) -> String {
 
     for token in input.iter() {
         emitter.before(token, &input);
-        emitter.raw(input.slice());
+
+        let raw = input.slice();
+        let slice = if token == Token::Whitespace && raw.len() > 2 {
+            "  "
+        } else {
+            raw
+        };
+
+        emitter.raw(slice);
         emitter.after(token, &input);
     }
 
