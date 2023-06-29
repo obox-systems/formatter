@@ -1,5 +1,5 @@
 #![allow(incomplete_features)]
-#![feature(generic_const_exprs, internal_output_capture)]
+#![feature(generic_const_exprs, internal_output_capture, exit_status_error)]
 #![deny(clippy::use_self, unused_qualifications, unreachable_pub)]
 
 use crate::stdx::CommandExt;

@@ -50,13 +50,6 @@ impl Token {
             _ => true,
         }
     }
-
-    pub(crate) fn emit_whitspace(&self) -> bool {
-        match *self {
-            Token::OpenDelimiter(_) | Token::CloseDelimiter(_) => true,
-            _ => false,
-        }
-    }
 }
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
