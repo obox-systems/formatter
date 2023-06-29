@@ -325,6 +325,7 @@ dependencies = [
  "jwalk",
  "miette",
  "pretty_assertions",
+ "unicode-ident",
  "wca",
 ]
 

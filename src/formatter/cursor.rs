@@ -48,4 +48,8 @@ impl<'me> Cursor<'me> {
     pub(crate) fn matches(&self, ch: char) -> bool {
         self.peek() == Some(ch)
     }
+
+    pub(crate) fn shift_cls(&self, f: impl Fn(char) -> bool) -> bool {
+        self.peek().is_some_and(f)
+    }
 }

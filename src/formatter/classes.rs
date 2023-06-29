@@ -1,3 +1,5 @@
+pub(crate) use unicode_ident::{is_xid_continue, is_xid_start};
+
 /// Source: https://github.com/rust-lang/rust/blob/master/compiler/rustc_lexer/src/lib.rs#L276C1-L303C2
 pub(crate) fn is_whitespace(c: char) -> bool {
     matches!(

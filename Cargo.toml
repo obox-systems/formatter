@@ -8,6 +8,7 @@ itertools = "0.11"
 miette = { version = "5.9", features = ["fancy"] }
 wca = { version = "0.1", git = "https://github.com/Barsik-sus/wTools.git", branch = "ca_dot_command_merged" }
 jwalk = "0.8"
+unicode-ident = "1.0"
 
 [dev-dependencies]
 pretty_assertions = "1.2"

@@ -28,6 +28,10 @@ pub(crate) enum Token {
     Plus,
     /// `++`
     PlusPlus,
+    /// '+='
+    PlusEq,
+    /// `!=`
+    NeEq,
     /// `-`
     Minus,
     /// `/`
@@ -36,6 +40,17 @@ pub(crate) enum Token {
     Star,
     /// `>=`
     GreaterThan,
+
+    /// '!='
+    BangEq,
+
+    /// `->`, `=>`
+    Arrow,
+
+    /// `'me`
+    Lifetime,
+
+    Char,
 
     /// End of file.
     Eof,
@@ -93,16 +108,21 @@ impl<'me> Input<'me> {
 
         while let Some(first_char) = cursor.shift() {
             let token = match first_char {
+                '!' if cursor.shift_if_eq('=') => Token::BangEq,
                 '(' => Token::OpenDelimiter(Delimiter::Paren),
                 '[' => Token::OpenDelimiter(Delimiter::Bracket),
                 '{' => Token::OpenDelimiter(Delimiter::Brace),
                 ')' => Token::CloseDelimiter(Delimiter::Paren),
                 ']' => Token::CloseDelimiter(Delimiter::Bracket),
                 '}' => Token::CloseDelimiter(Delimiter::Brace),
+                '=' if cursor.shift_if_eq('>') => Token::Arrow,
                 '=' if cursor.shift_if_eq('=') => Token::EqEq,
+                '=' if cursor.shift_if_eq('!') => Token::NeEq,
                 '=' => Token::Eq,
                 '+' if cursor.shift_if_eq('+') => Token::PlusPlus,
+                '+' if cursor.shift_if_eq('=') => Token::PlusEq,
                 '+' => Token::Plus,
+                '-' if cursor.shift_if_eq('>') => Token::Arrow,
                 '-' => Token::Minus,
                 '>' if cursor.shift_if_eq('=') => Token::GreaterThan,
                 '/' if cursor.shift_if_eq('/') => {
@@ -115,6 +135,7 @@ impl<'me> Input<'me> {
                     scan_string(first_char, &mut cursor);
                     Token::String
                 }
+                '\'' => scan_lifetime_or_char(&mut cursor),
                 _ if classes::is_newline(first_char) => {
                     cursor.shift_while(classes::is_newline);
                     Token::Newline
@@ -209,6 +230,21 @@ impl<'me> InputBuilder<'me> {
     }
 }
 
+fn scan_lifetime_or_char(cursor: &mut Cursor) -> Token {
+    if cursor.shift_cls(classes::is_xid_start) {
+        cursor.shift_while(classes::is_xid_continue);
+
+        if cursor.shift_if_eq('\'') {
+            Token::Char
+        } else {
+            Token::Lifetime
+        }
+    } else {
+        scan_char(cursor);
+        Token::Char
+    }
+}
+
 fn scan_string(c: char, cursor: &mut Cursor) {
     let quote_type = c;
     while let Some(c) = cursor.peek() {
@@ -225,6 +261,27 @@ fn scan_string(c: char, cursor: &mut Cursor) {
             }
             _ => {
                 cursor.shift();
+            }
+        }
+    }
+}
+
+fn scan_char(ptr: &mut Cursor) {
+    while let Some(c) = ptr.peek() {
+        match c {
+            '\\' => {
+                ptr.shift();
+                if ptr.matches('\\') || ptr.matches('\'') {
+                    ptr.shift();
+                }
+            }
+            '\'' => {
+                ptr.shift();
+                return;
+            }
+            '\n' => return,
+            _ => {
+                ptr.shift();
             }
         }
     }
@@ -248,6 +305,11 @@ mod tests {
     }
 
     #[test]
+    fn foo() {
+        check("'\u{0009}'", expect!["Char at (0, 3)"]);
+    }
+
+    #[test]
     fn operators() {
         check(
             "+ ++ - * / % = == != < > <= >= && || ! & | ^ << >>",
@@ -268,8 +330,7 @@ mod tests {
                 Whitespace at (14, 15)
                 EqEq at (15, 17)
                 Whitespace at (17, 18)
-                Unknown at (18, 19)
-                Eq at (19, 20)
+                BangEq at (18, 20)
                 Whitespace at (20, 21)
                 Unknown at (21, 22)
                 Whitespace at (22, 23)
@@ -333,13 +394,7 @@ mod tests {
                 String at (30, 36)
                 Newline at (36, 37)
                 Whitespace at (37, 49)
-                Unknown at (49, 50)
-                Unknown at (50, 51)
-                Unknown at (51, 52)
-                Unknown at (52, 53)
-                Unknown at (53, 54)
-                Unknown at (54, 55)
-                Unknown at (55, 56)
+                Char at (49, 56)
                 Newline at (56, 57)
                 Whitespace at (57, 69)"#]],
         );
