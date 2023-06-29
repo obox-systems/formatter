@@ -49,6 +49,8 @@ impl<'me> Input<'me> {
         builder.finish()
     }
 
+    /// Returns an iterator over the tokens in the token stream.
+    /// The iterator will iterate over the tokens starting from the current position.
     pub(crate) fn iter(&'me self) -> impl Iterator<Item = Token> + 'me {
         std::iter::from_fn(|| self.next())
     }
@@ -65,6 +67,8 @@ impl<'me> Input<'me> {
         }
     }
 
+    /// Returns the token at the current position in the token stream.
+    /// The current position is determined by the value of `self.pos`.
     pub(crate) fn peek(&self) -> Token {
         self.tokens[self.pos.get()]
     }
@@ -73,6 +77,8 @@ impl<'me> Input<'me> {
         self.tokens[self.pos.get().saturating_sub(2)]
     }
 
+    /// Returns the span of the current position in the source.
+    /// The span is determined by the start offsets stored in `self.start_offsets`.
     pub(crate) fn span(&self) -> (u32, u32) {
         let hi = self.start_offsets[self.pos.get()];
         let lo = self.start_offsets[self.pos.get() - 1];
@@ -80,6 +86,8 @@ impl<'me> Input<'me> {
         (lo, hi)
     }
 
+    /// Returns a slice of the source string corresponding to the span.
+    /// The span is determined by the `lo` and `hi` values obtained from `self.span()`.
     pub(crate) fn slice(&self) -> &str {
         let (lo, hi) = self.span();
 

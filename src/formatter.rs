@@ -78,8 +78,11 @@ impl Token {
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub(crate) enum Delimiter {
+    /// `(`, `)`
     Paren,
+    /// `{`, `}`
     Brace,
+    /// `[`, `]`
     Bracket,
 }
 
