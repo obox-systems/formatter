@@ -85,8 +85,7 @@ impl Token {
             Self::OpenDelimiter(delimiter) | Self::CloseDelimiter(delimiter) => {
                 Some(delimiter) != kind
             }
-            Self::Whitespace => kind == Some(Delimiter::Brace),
-            Self::Newline => false,
+            Self::Whitespace | Self::Newline => false,
             _ => true,
         }
     }
@@ -111,15 +110,17 @@ pub(crate) fn format(source: &str) -> String {
             Token::CloseDelimiter(delimiter) => {
                 if input.prev().skip_whitespace(delimiter.into()) {
                     match delimiter {
-                        Delimiter::Brace => {
-                            emitter.newline();
-                        }
+                        Delimiter::Brace => {}
                         _ => emitter.whitespace(),
                     }
                 }
             }
             _ if token.is_operator() && input.prev() != Token::Whitespace => emitter.whitespace(),
             _ => (),
+        }
+
+        if token == Token::OpenDelimiter(Delimiter::Brace) && input.prev() != Token::Newline {
+            emitter.newline()
         }
 
         emitter.raw(input.slice());
