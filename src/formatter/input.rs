@@ -1,6 +1,81 @@
 use std::cell::Cell;
 
-use super::{classes, cursor::Cursor, Delimiter, Token};
+use super::{classes, cursor::Cursor};
+
+#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+#[non_exhaustive]
+pub(crate) enum Token {
+    /// `(`, `[`, `{`
+    OpenDelimiter(Delimiter),
+    /// `)`, `]`, `}`
+    CloseDelimiter(Delimiter),
+    /// `"hello"`
+    String,
+    /// ` `
+    Whitespace,
+    /// `\n`, `\r`
+    Newline,
+    /// Unknown symbol
+    Unknown,
+    /// `// SSS`
+    Comment,
+    // operators
+    /// `=`
+    Eq,
+    /// `==`
+    EqEq,
+    /// `+`
+    Plus,
+    /// `++`
+    PlusPlus,
+    /// `-`
+    Minus,
+    /// `/`
+    Slash,
+    /// `*`
+    Star,
+
+    /// End of file.
+    Eof,
+}
+
+impl Token {
+    /// Checks whether the token is an operator.
+    pub(crate) fn is_operator(&self) -> bool {
+        matches!(
+            self,
+            Self::Plus
+                | Self::PlusPlus
+                | Self::Eq
+                | Self::EqEq
+                | Self::Minus
+                | Self::Slash
+                | Self::Star
+        )
+    }
+}
+
+impl Token {
+    pub(crate) fn skip_whitespace(&self, kind: Option<Delimiter>) -> bool {
+        match *self {
+            Self::OpenDelimiter(delimiter) | Self::CloseDelimiter(delimiter) => {
+                Some(delimiter) != kind
+            }
+            Self::Whitespace | Self::Newline => false,
+            _ => true,
+        }
+    }
+}
+
+#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+pub(crate) enum Delimiter {
+    /// `(`, `)`
+    Paren,
+    /// `{`, `}`
+    Brace,
+    /// `[`, `]`
+    Bracket,
+}
 
 #[derive(Default)]
 pub(crate) struct Input<'me> {
