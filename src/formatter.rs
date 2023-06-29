@@ -94,7 +94,7 @@ pub(crate) fn format(source: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use std::path::PathBuf;
+    use std::{io::Write, path::PathBuf};
 
     use super::format;
     use pretty_assertions::assert_eq;
@@ -139,11 +139,27 @@ mod tests {
         assert_eq!(with_extension(&path, "expected"), expected);
     }
 
+    fn read_to_string(path: PathBuf) -> Result<String, std::fs::File> {
+        match std::fs::read_to_string(&path) {
+            Ok(t) => Ok(t),
+            Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
+                Err(std::fs::File::create(path).unwrap())
+            }
+            Err(err) => panic!("{err:?}"),
+        }
+    }
+
     #[test]
     fn tests() {
         traverse("tests/assets", |input, expected| {
             let input = format(&std::fs::read_to_string(input).unwrap());
-            let expected = std::fs::read_to_string(expected).unwrap();
+            let expected = match read_to_string(expected) {
+                Ok(t) => t,
+                Err(mut file) => {
+                    write!(file, "{input}").unwrap();
+                    return;
+                }
+            };
 
             assert_eq!(input, expected);
 
