@@ -34,6 +34,8 @@ pub(crate) enum Token {
     Slash,
     /// `*`
     Star,
+    /// `>=`
+    GreaterThan,
 
     /// End of file.
     Eof,
@@ -51,6 +53,7 @@ impl Token {
                 | Self::Minus
                 | Self::Slash
                 | Self::Star
+                | Self::GreaterThan
         )
     }
 }
@@ -101,6 +104,7 @@ impl<'me> Input<'me> {
                 '+' if cursor.shift_if_eq('+') => Token::PlusPlus,
                 '+' => Token::Plus,
                 '-' => Token::Minus,
+                '>' if cursor.shift_if_eq('=') => Token::GreaterThan,
                 '/' if cursor.shift_if_eq('/') => {
                     cursor.shift_while(|ch| !classes::is_newline(ch));
                     Token::Comment
@@ -248,54 +252,53 @@ mod tests {
         check(
             "+ ++ - * / % = == != < > <= >= && || ! & | ^ << >>",
             expect![[r#"
-            Plus at (0, 1)
-            Whitespace at (1, 2)
-            PlusPlus at (2, 4)
-            Whitespace at (4, 5)
-            Minus at (5, 6)
-            Whitespace at (6, 7)
-            Star at (7, 8)
-            Whitespace at (8, 9)
-            Slash at (9, 10)
-            Whitespace at (10, 11)
-            Unknown at (11, 12)
-            Whitespace at (12, 13)
-            Eq at (13, 14)
-            Whitespace at (14, 15)
-            EqEq at (15, 17)
-            Whitespace at (17, 18)
-            Unknown at (18, 19)
-            Eq at (19, 20)
-            Whitespace at (20, 21)
-            Unknown at (21, 22)
-            Whitespace at (22, 23)
-            Unknown at (23, 24)
-            Whitespace at (24, 25)
-            Unknown at (25, 26)
-            Eq at (26, 27)
-            Whitespace at (27, 28)
-            Unknown at (28, 29)
-            Eq at (29, 30)
-            Whitespace at (30, 31)
-            Unknown at (31, 32)
-            Unknown at (32, 33)
-            Whitespace at (33, 34)
-            Unknown at (34, 35)
-            Unknown at (35, 36)
-            Whitespace at (36, 37)
-            Unknown at (37, 38)
-            Whitespace at (38, 39)
-            Unknown at (39, 40)
-            Whitespace at (40, 41)
-            Unknown at (41, 42)
-            Whitespace at (42, 43)
-            Unknown at (43, 44)
-            Whitespace at (44, 45)
-            Unknown at (45, 46)
-            Unknown at (46, 47)
-            Whitespace at (47, 48)
-            Unknown at (48, 49)
-            Unknown at (49, 50)"#]],
+                Plus at (0, 1)
+                Whitespace at (1, 2)
+                PlusPlus at (2, 4)
+                Whitespace at (4, 5)
+                Minus at (5, 6)
+                Whitespace at (6, 7)
+                Star at (7, 8)
+                Whitespace at (8, 9)
+                Slash at (9, 10)
+                Whitespace at (10, 11)
+                Unknown at (11, 12)
+                Whitespace at (12, 13)
+                Eq at (13, 14)
+                Whitespace at (14, 15)
+                EqEq at (15, 17)
+                Whitespace at (17, 18)
+                Unknown at (18, 19)
+                Eq at (19, 20)
+                Whitespace at (20, 21)
+                Unknown at (21, 22)
+                Whitespace at (22, 23)
+                Unknown at (23, 24)
+                Whitespace at (24, 25)
+                Unknown at (25, 26)
+                Eq at (26, 27)
+                Whitespace at (27, 28)
+                GreaterThan at (28, 30)
+                Whitespace at (30, 31)
+                Unknown at (31, 32)
+                Unknown at (32, 33)
+                Whitespace at (33, 34)
+                Unknown at (34, 35)
+                Unknown at (35, 36)
+                Whitespace at (36, 37)
+                Unknown at (37, 38)
+                Whitespace at (38, 39)
+                Unknown at (39, 40)
+                Whitespace at (40, 41)
+                Unknown at (41, 42)
+                Whitespace at (42, 43)
+                Unknown at (43, 44)
+                Whitespace at (44, 45)
+                Unknown at (45, 46)
+                Unknown at (46, 47)
+                Whitespace at (47, 48)
+                Unknown at (48, 49)
+                Unknown at (49, 50)"#]],
         );
     }
 

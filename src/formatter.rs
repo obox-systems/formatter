@@ -146,6 +146,9 @@ mod tests {
             let expected = std::fs::read_to_string(expected).unwrap();
 
             assert_eq!(input, expected);
+
+            let expected = format(&input);
+            assert_eq!(input, expected);
         });
     }
 }
