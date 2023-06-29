@@ -56,7 +56,7 @@ impl Token {
 }
 
 impl Token {
-    pub(crate) fn skip_whitespace(&self, a: Option<Token>) -> bool {
+    pub(crate) fn skip_whitespace(&self, a: Option<Self>) -> bool {
         match *self {
             b @ (Self::OpenDelimiter(_) | Self::CloseDelimiter(_)) => Some(b) != a,
             Self::Whitespace | Self::Newline => false,
