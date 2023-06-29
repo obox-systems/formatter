@@ -28,6 +28,10 @@ impl<'me> Input<'me> {
                 '+' if cursor.shift_if_eq('+') => Token::PlusPlus,
                 '+' => Token::Plus,
                 '-' => Token::Minus,
+                '/' if cursor.shift_if_eq('/') => {
+                    cursor.shift_while(|ch| !classes::is_newline(ch));
+                    Token::Comment
+                }
                 '/' => Token::Slash,
                 '*' => Token::Star,
                 '"' => {

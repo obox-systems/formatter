@@ -3,7 +3,7 @@ float noise ( in vec2 st )
     vec2 i = floor( st );
     vec2 f = fract( st );
 
-    /  / Four corners in 2D of a tile
+    // Four corners in 2D of a tile
     float a = random( i );
     float b = random( i + vec2( 1.0, 0.0 ));
     float c = random( i + vec2( 0.0, 1.0 ));

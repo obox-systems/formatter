@@ -42,7 +42,8 @@ pub(crate) enum Token {
     Newline,
     /// Unknown symbol
     Unknown,
-
+    /// `// SSS`
+    Comment,
     // operators
     /// `=`
     Eq,
