@@ -31,7 +31,10 @@ impl Emitter {
     fn before(&mut self, current: Token, input: &Input) {
         match current {
             Token::CloseDelimiter(delimiter) => {
-                if input.prev().skip_whitespace(delimiter.into()) {
+                if input
+                    .prev()
+                    .skip_whitespace(Token::OpenDelimiter(delimiter).into())
+                {
                     match delimiter {
                         Delimiter::Brace => {}
                         _ => self.whitespace(),
@@ -52,7 +55,9 @@ impl Emitter {
         match current {
             Token::OpenDelimiter(delimiter) => match delimiter {
                 Delimiter::Paren | Delimiter::Bracket
-                    if input.peek().skip_whitespace(delimiter.into()) =>
+                    if input
+                        .peek()
+                        .skip_whitespace(Token::CloseDelimiter(delimiter).into()) =>
                 {
                     self.whitespace();
                 }

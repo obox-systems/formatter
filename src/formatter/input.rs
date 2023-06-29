@@ -56,11 +56,9 @@ impl Token {
 }
 
 impl Token {
-    pub(crate) fn skip_whitespace(&self, kind: Option<Delimiter>) -> bool {
+    pub(crate) fn skip_whitespace(&self, a: Option<Token>) -> bool {
         match *self {
-            Self::OpenDelimiter(delimiter) | Self::CloseDelimiter(delimiter) => {
-                Some(delimiter) != kind
-            }
+            b @ (Self::OpenDelimiter(_) | Self::CloseDelimiter(_)) => Some(b) != a,
             Self::Whitespace | Self::Newline => false,
             _ => true,
         }
