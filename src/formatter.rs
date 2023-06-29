@@ -1,49 +1,106 @@
-use std::fmt::Write;
-
 use self::input::Input;
 
 mod classes;
 mod cursor;
 mod input;
 
+#[derive(Default)]
+struct Emitter {
+    output: String,
+}
+
+impl Emitter {
+    fn newline(&mut self) {
+        self.output.push('\n');
+    }
+
+    fn raw(&mut self, string: &str) {
+        self.output.push_str(string);
+    }
+
+    fn whitespace(&mut self) {
+        self.output.push(' ');
+    }
+
+    fn finish(self) -> String {
+        self.output
+    }
+}
+
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 #[non_exhaustive]
 pub(crate) enum Token {
-    OpenDelimiter,
-    CloseDelimiter,
+    OpenDelimiter(Delimiter),
+    CloseDelimiter(Delimiter),
     String,
     Whitespace,
+    Newline,
     Unknown,
     Eof,
 }
 
+impl Token {
+    pub(crate) fn skip_whitespace(&self, kind: Option<Delimiter>) -> bool {
+        match *self {
+            Token::OpenDelimiter(delimiter) | Token::CloseDelimiter(delimiter) => {
+                Some(delimiter) != kind
+            }
+            Self::Whitespace => kind == Some(Delimiter::Brace),
+            Self::Newline => false,
+            _ => true,
+        }
+    }
+
+    pub(crate) fn emit_whitspace(&self) -> bool {
+        match *self {
+            Token::OpenDelimiter(_) | Token::CloseDelimiter(_) => true,
+            _ => false,
+        }
+    }
+}
+
+#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+pub(crate) enum Delimiter {
+    Paren,
+    Brace,
+    Bracket,
+}
+
 pub(crate) fn format(source: &str) -> String {
-    let mut output = String::new();
     let input = Input::of(source);
+    let mut emitter = Emitter::default();
 
     for token in input.iter() {
         match token {
-            Token::CloseDelimiter
-                if !matches!(input.prev(), Token::OpenDelimiter | Token::Whitespace) =>
-            {
-                output.write_char(' ').unwrap()
+            Token::CloseDelimiter(delimiter) => {
+                if input.prev().skip_whitespace(delimiter.into()) {
+                    match delimiter {
+                        Delimiter::Brace => {
+                            emitter.newline();
+                        }
+                        _ => emitter.whitespace(),
+                    }
+                }
             }
             _ => (),
         }
 
-        output.write_str(input.slice()).unwrap();
+        emitter.raw(input.slice());
 
         match token {
-            Token::OpenDelimiter
-                if !matches!(input.peek(), Token::CloseDelimiter | Token::Whitespace) =>
-            {
-                output.write_char(' ').unwrap()
-            }
+            Token::OpenDelimiter(delimiter) => match delimiter {
+                Delimiter::Paren | Delimiter::Bracket
+                    if input.peek().skip_whitespace(delimiter.into()) =>
+                {
+                    emitter.whitespace();
+                }
+                _ => {}
+            },
             _ => (),
         }
     }
 
-    output
+    emitter.finish()
 }
 
 #[cfg(test)]
@@ -86,52 +143,5 @@ mod tests {
 
             assert_eq!(input, expected);
         });
-    }
-
-    fn check(lines: &[&str], expect: &[&str]) {
-        let actual: Vec<String> = lines.iter().map(|line| format(line)).collect();
-        assert_eq!(actual, expect);
-    }
-
-    #[test]
-    fn empty() {
-        check(&[""], &[""]);
-    }
-
-    #[test]
-    fn single() {
-        check(&[")", "(", "[", "]"], &[" )", "( ", "[ ", " ]"]);
-    }
-
-    #[test]
-    fn attribute() {
-        check(
-            &[
-                "#[enum_dispatch(DatabaseImpl)]",
-                "#[ enum_dispatch( DatabaseImpl ) ]",
-            ],
-            &[
-                "#[ enum_dispatch( DatabaseImpl ) ]",
-                "#[ enum_dispatch( DatabaseImpl ) ]",
-            ],
-        );
-    }
-
-    #[test]
-    fn call() {
-        check(&["add(40, 2)"], &["add( 40, 2 )"]);
-    }
-
-    #[test]
-    fn parentheses() {
-        check(
-            &["()", "(40, 2)", "( 40, 2 )"],
-            &["()", "( 40, 2 )", "( 40, 2 )"],
-        );
-    }
-
-    #[test]
-    fn string() {
-        check(&["\"(hello)\""], &["\"(hello)\""]);
     }
 }

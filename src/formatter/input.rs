@@ -1,6 +1,6 @@
 use std::cell::Cell;
 
-use super::{classes, cursor::Cursor, Token};
+use super::{classes, cursor::Cursor, Delimiter, Token};
 
 #[derive(Default)]
 pub(crate) struct Input<'me> {
@@ -17,11 +17,19 @@ impl<'me> Input<'me> {
 
         while let Some(first_char) = cursor.shift() {
             let token = match first_char {
-                '(' | '[' => Token::OpenDelimiter,
-                ')' | ']' => Token::CloseDelimiter,
+                '(' => Token::OpenDelimiter(Delimiter::Paren),
+                '[' => Token::OpenDelimiter(Delimiter::Bracket),
+                '{' => Token::OpenDelimiter(Delimiter::Brace),
+                ')' => Token::CloseDelimiter(Delimiter::Paren),
+                ']' => Token::CloseDelimiter(Delimiter::Bracket),
+                '}' => Token::CloseDelimiter(Delimiter::Brace),
                 '"' => {
                     scan_string(first_char, &mut cursor);
                     Token::String
+                }
+                '\n' | '\r' => {
+                    cursor.shift_while(|ch| ch == '\n' || ch == '\r');
+                    Token::Newline
                 }
                 _ if classes::is_whitespace(first_char) => {
                     cursor.shift_while(classes::is_whitespace);
@@ -146,7 +154,9 @@ mod tests {
     #[test]
     fn whitespace() {
         check("    ", expect!["Whitespace at (0, 4)"]);
-        check("\n  \n  \n", expect!["Whitespace at (0, 7)"]);
+        check("\n  \n  \n", expect![[r#"
+            Newline at (0, 1)
+            Whitespace at (1, 7)"#]]);
     }
 
     #[test]
@@ -158,11 +168,14 @@ mod tests {
             'hello'
             "#,
             expect![[r#"
-                Whitespace at (0, 13)
+                Newline at (0, 1)
+                Whitespace at (1, 13)
                 String at (13, 17)
-                Whitespace at (17, 30)
+                Newline at (17, 18)
+                Whitespace at (18, 30)
                 String at (30, 36)
-                Whitespace at (36, 49)
+                Newline at (36, 37)
+                Whitespace at (37, 49)
                 Unknown at (49, 50)
                 Unknown at (50, 51)
                 Unknown at (51, 52)
@@ -170,7 +183,8 @@ mod tests {
                 Unknown at (53, 54)
                 Unknown at (54, 55)
                 Unknown at (55, 56)
-                Whitespace at (56, 69)"#]],
+                Newline at (56, 57)
+                Whitespace at (57, 69)"#]],
         );
     }
 }
