@@ -41,7 +41,7 @@ pub(crate) enum Token {
 
 impl Token {
     /// Checks whether the token is an operator.
-    pub(crate) fn is_operator(&self) -> bool {
+    pub(crate) fn maybe_binary_operator(&self) -> bool {
         matches!(
             self,
             Self::Plus

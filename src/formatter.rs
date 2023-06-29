@@ -41,7 +41,9 @@ impl Emitter {
             Token::OpenDelimiter(Delimiter::Brace) if input.prev() != Token::Newline => {
                 self.newline()
             }
-            _ if current.is_operator() && input.prev() != Token::Whitespace => self.whitespace(),
+            _ if current.maybe_binary_operator() && input.prev() != Token::Whitespace => {
+                self.whitespace()
+            }
             _ => {}
         }
     }
@@ -56,7 +58,9 @@ impl Emitter {
                 }
                 _ => {}
             },
-            _ if current.is_operator() && input.peek() != Token::Whitespace => self.whitespace(),
+            _ if current.maybe_binary_operator() && input.peek() != Token::Whitespace => {
+                self.whitespace()
+            }
             _ => (),
         }
     }
