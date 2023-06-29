@@ -59,17 +59,14 @@ pub(crate) enum Token {
 impl Token {
     /// Checks whether the token is an operator.
     fn is_operator(&self) -> bool {
-        matches!(
-            self,
-            Token::Plus | Token::Minus | Token::Slash | Token::Star
-        )
+        matches!(self, Self::Plus | Self::Minus | Self::Slash | Self::Star)
     }
 }
 
 impl Token {
     pub(crate) fn skip_whitespace(&self, kind: Option<Delimiter>) -> bool {
         match *self {
-            Token::OpenDelimiter(delimiter) | Token::CloseDelimiter(delimiter) => {
+            Self::OpenDelimiter(delimiter) | Self::CloseDelimiter(delimiter) => {
                 Some(delimiter) != kind
             }
             Self::Whitespace => kind == Some(Delimiter::Brace),
