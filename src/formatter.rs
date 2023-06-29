@@ -30,13 +30,40 @@ impl Emitter {
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 #[non_exhaustive]
 pub(crate) enum Token {
+    /// `(`, `[`, `{`
     OpenDelimiter(Delimiter),
+    /// `)`, `]`, `}`
     CloseDelimiter(Delimiter),
+    /// `"hello"`
     String,
+    /// ` `
     Whitespace,
+    /// `\n`, `\r`
     Newline,
+    /// Unknown symbol
     Unknown,
+    // operators
+    /// `+`
+    Plus,
+    /// `-`
+    Minus,
+    /// `/`
+    Slash,
+    /// `*`
+    Star,
+
+    /// End of file.
     Eof,
+}
+
+impl Token {
+    /// Checks whether the token is an operator.
+    fn is_operator(&self) -> bool {
+        matches!(
+            self,
+            Token::Plus | Token::Minus | Token::Slash | Token::Star
+        )
+    }
 }
 
 impl Token {
@@ -75,6 +102,7 @@ pub(crate) fn format(source: &str) -> String {
                     }
                 }
             }
+            _ if token.is_operator() && input.prev() != Token::Whitespace => emitter.whitespace(),
             _ => (),
         }
 
@@ -89,6 +117,7 @@ pub(crate) fn format(source: &str) -> String {
                 }
                 _ => {}
             },
+            _ if token.is_operator() && input.peek() != Token::Whitespace => emitter.whitespace(),
             _ => (),
         }
     }

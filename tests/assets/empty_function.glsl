@@ -1,3 +1,1 @@
-float empty( in vec2 st ){
-
-}
+float empty() {}

@@ -23,6 +23,10 @@ impl<'me> Input<'me> {
                 ')' => Token::CloseDelimiter(Delimiter::Paren),
                 ']' => Token::CloseDelimiter(Delimiter::Bracket),
                 '}' => Token::CloseDelimiter(Delimiter::Brace),
+                '+' => Token::Plus,
+                '-' => Token::Minus,
+                '/' => Token::Slash,
+                '*' => Token::Star,
                 '"' => {
                     scan_string(first_char, &mut cursor);
                     Token::String
@@ -154,9 +158,12 @@ mod tests {
     #[test]
     fn whitespace() {
         check("    ", expect!["Whitespace at (0, 4)"]);
-        check("\n  \n  \n", expect![[r#"
+        check(
+            "\n  \n  \n",
+            expect![[r#"
             Newline at (0, 1)
-            Whitespace at (1, 7)"#]]);
+            Whitespace at (1, 7)"#]],
+        );
     }
 
     #[test]
