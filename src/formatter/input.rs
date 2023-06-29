@@ -31,8 +31,8 @@ impl<'me> Input<'me> {
                     scan_string(first_char, &mut cursor);
                     Token::String
                 }
-                '\n' | '\r' => {
-                    cursor.shift_while(|ch| ch == '\n' || ch == '\r');
+                _ if classes::is_newline(first_char) => {
+                    cursor.shift_while(classes::is_newline);
                     Token::Newline
                 }
                 _ if classes::is_whitespace(first_char) => {
@@ -161,8 +161,11 @@ mod tests {
         check(
             "\n  \n  \n",
             expect![[r#"
-            Newline at (0, 1)
-            Whitespace at (1, 7)"#]],
+                Newline at (0, 1)
+                Whitespace at (1, 3)
+                Newline at (3, 4)
+                Whitespace at (4, 6)
+                Newline at (6, 7)"#]],
         );
     }
 
