@@ -129,6 +129,21 @@ mod tests {
     }
 
     #[test]
+    fn with_extension_test() {
+        let path = PathBuf::from("file.txt");
+        let expected = PathBuf::from("file.txt.expected");
+        assert_eq!(with_extension(&path, "expected"), expected);
+
+        let path = PathBuf::from("dir/file");
+        let expected = PathBuf::from("dir/file.expected");
+        assert_eq!(with_extension(&path, "expected"), expected);
+
+        let path = PathBuf::from("file");
+        let expected = PathBuf::from("file.expected");
+        assert_eq!(with_extension(&path, "expected"), expected);
+    }
+
+    #[test]
     fn tests() {
         traverse("tests/assets", |input, expected| {
             let input = format(&std::fs::read_to_string(input).unwrap());
