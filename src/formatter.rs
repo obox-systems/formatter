@@ -94,7 +94,7 @@ pub(crate) fn format(source: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use std::{io::Write, path::PathBuf};
+    use std::path::PathBuf;
 
     use super::format;
     use pretty_assertions::assert_eq;
