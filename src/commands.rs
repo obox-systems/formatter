@@ -1,4 +1,5 @@
 use std::path::PathBuf;
+use std::process::Command;
 
 use miette::{IntoDiagnostic as _, WrapErr as _};
 use wca::{Args, Context, Props};
@@ -7,6 +8,17 @@ use crate::{parse_args, Result};
 
 pub(crate) fn format(cx: Context, _args: Args, _props: Props) -> Result {
     let source = cx.get_ref::<PathBuf>();
+
+    let status = Command::new("git")
+        .args(["diff", "--exit-code"])
+        .stdout(std::process::Stdio::null())
+        .status()
+        .into_diagnostic()?;
+
+    status
+        .exit_ok()
+        .into_diagnostic()
+        .context("Git index is dirty; not running formatter")?;
 
     match source {
         Some(path) => {

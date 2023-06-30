@@ -1,100 +1,162 @@
-use std::fmt::Write;
-
-use self::input::Input;
+use self::input::{Delimiter, Input, Token};
 
 mod classes;
 mod cursor;
 mod input;
 
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
-#[non_exhaustive]
-pub(crate) enum Token {
-    OpenDelimiter,
-    CloseDelimiter,
-    String,
-    Whitespace,
-    Unknown,
-    Eof,
+#[derive(Default)]
+struct Emitter {
+    output: String,
 }
 
-pub(crate) fn format(source: &str) -> String {
-    let mut output = String::new();
-    let input = Input::of(source);
+impl Emitter {
+    fn newline(&mut self) {
+        self.output.push('\n');
+    }
 
-    for token in input.iter() {
-        match token {
-            Token::CloseDelimiter
-                if !matches!(input.prev(), Token::OpenDelimiter | Token::Whitespace) =>
-            {
-                output.write_char(' ').unwrap()
+    fn raw(&mut self, string: &str) {
+        self.output.push_str(string);
+    }
+
+    fn whitespace(&mut self) {
+        self.output.push(' ');
+    }
+
+    fn finish(self) -> String {
+        self.output
+    }
+}
+
+impl Emitter {
+    fn before(&mut self, current: Token, input: &Input) {
+        match current {
+            Token::CloseDelimiter(delimiter) => {
+                if input
+                    .prev()
+                    .skip_whitespace(Token::OpenDelimiter(delimiter).into())
+                {
+                    match delimiter {
+                        Delimiter::Brace => {}
+                        _ => self.whitespace(),
+                    }
+                }
             }
-            _ => (),
+            Token::OpenDelimiter(Delimiter::Brace) if input.prev() != Token::Newline => {
+                self.newline()
+            }
+            _ if current.maybe_binary_operator() && input.prev() != Token::Whitespace => {
+                self.whitespace()
+            }
+            _ => {}
         }
+    }
 
-        output.write_str(input.slice()).unwrap();
-
-        match token {
-            Token::OpenDelimiter
-                if !matches!(input.peek(), Token::CloseDelimiter | Token::Whitespace) =>
-            {
-                output.write_char(' ').unwrap()
+    fn after(&mut self, current: Token, input: &Input) {
+        match current {
+            Token::OpenDelimiter(delimiter) => match delimiter {
+                Delimiter::Paren | Delimiter::Bracket
+                    if input
+                        .peek()
+                        .skip_whitespace(Token::CloseDelimiter(delimiter).into()) =>
+                {
+                    self.whitespace();
+                }
+                _ => {}
+            },
+            _ if current.maybe_binary_operator() && input.peek() != Token::Whitespace => {
+                self.whitespace()
             }
             _ => (),
         }
     }
+}
 
-    output
+pub(crate) fn format(source: &str) -> String {
+    let input = Input::of(source);
+    let mut emitter = Emitter::default();
+
+    for token in input.iter() {
+        emitter.before(token, &input);
+
+        let raw = input.slice();
+        let slice = if token == Token::Whitespace && raw.len() > 2 {
+            "  "
+        } else {
+            raw
+        };
+
+        emitter.raw(slice);
+        emitter.after(token, &input);
+    }
+
+    emitter.finish()
 }
 
 #[cfg(test)]
 mod tests {
+    use std::path::PathBuf;
+
     use super::format;
     use pretty_assertions::assert_eq;
 
-    fn check(lines: &[&str], expect: &[&str]) {
-        let actual: Vec<String> = lines.iter().map(|line| format(line)).collect();
-        assert_eq!(actual, expect);
+    fn with_extension(path: &PathBuf, extension: &str) -> PathBuf {
+        match path.extension() {
+            Some(raw_extension) => {
+                let mut raw_extension = raw_extension.to_os_string();
+                raw_extension.push(".");
+                raw_extension.push(extension);
+                path.with_extension(raw_extension)
+            }
+            None => path.with_extension(extension),
+        }
+    }
+
+    fn traverse(root: &str, f: impl Fn(PathBuf, PathBuf)) {
+        for entry in std::fs::read_dir(root).unwrap() {
+            let input_path = entry.unwrap().path();
+            let expected_path = with_extension(&input_path, "expected");
+
+            if input_path.extension().unwrap_or_default() == "expected" {
+                continue;
+            };
+
+            f(input_path, expected_path)
+        }
     }
 
     #[test]
-    fn empty() {
-        check(&[""], &[""]);
+    fn with_extension_test() {
+        let path = PathBuf::from("file.txt");
+        let expected = PathBuf::from("file.txt.expected");
+        assert_eq!(with_extension(&path, "expected"), expected);
+
+        let path = PathBuf::from("dir/file");
+        let expected = PathBuf::from("dir/file.expected");
+        assert_eq!(with_extension(&path, "expected"), expected);
+
+        let path = PathBuf::from("file");
+        let expected = PathBuf::from("file.expected");
+        assert_eq!(with_extension(&path, "expected"), expected);
+    }
+
+    fn read_or_create(path: PathBuf, fallback: &str) -> String {
+        match std::fs::read_to_string(&path) {
+            Ok(value) => value,
+            Err(err) if err.kind() == std::io::ErrorKind::NotFound => fallback.to_owned(),
+            Err(err) => panic!("{err:?}"),
+        }
     }
 
     #[test]
-    fn single() {
-        check(&[")", "(", "[", "]"], &[" )", "( ", "[ ", " ]"]);
-    }
+    fn tests() {
+        traverse("tests/assets", |input, expected| {
+            let input = format(&std::fs::read_to_string(input).unwrap());
+            let expected = read_or_create(expected, &input);
 
-    #[test]
-    fn attribute() {
-        check(
-            &[
-                "#[enum_dispatch(DatabaseImpl)]",
-                "#[ enum_dispatch( DatabaseImpl ) ]",
-            ],
-            &[
-                "#[ enum_dispatch( DatabaseImpl ) ]",
-                "#[ enum_dispatch( DatabaseImpl ) ]",
-            ],
-        );
-    }
+            assert_eq!(input, expected);
 
-    #[test]
-    fn call() {
-        check(&["add(40, 2)"], &["add( 40, 2 )"]);
-    }
-
-    #[test]
-    fn parentheses() {
-        check(
-            &["()", "(40, 2)", "( 40, 2 )"],
-            &["()", "( 40, 2 )", "( 40, 2 )"],
-        );
-    }
-
-    #[test]
-    fn string() {
-        check(&["\"(hello)\""], &["\"(hello)\""]);
+            let expected = format(&input);
+            assert_eq!(input, expected);
+        });
     }
 }
