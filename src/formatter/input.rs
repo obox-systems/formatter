@@ -50,6 +50,15 @@ pub(crate) enum Token {
     /// `'me`
     Lifetime,
 
+    /// `&`
+    BitAnd,
+
+    /// `&&`
+    And,
+
+    /// `%`
+    Rem,
+
     Char,
 
     /// End of file.
@@ -103,48 +112,53 @@ pub(crate) struct Input<'me> {
 
 impl<'me> Input<'me> {
     pub(crate) fn of(source: &'me str) -> Self {
+        use Token::*;
+
         let mut builder = InputBuilder::new(source);
         let mut cursor = Cursor::new(source);
 
         while let Some(first_char) = cursor.shift() {
             let token = match first_char {
-                '!' if cursor.shift_if_eq('=') => Token::BangEq,
-                '(' => Token::OpenDelimiter(Delimiter::Paren),
-                '[' => Token::OpenDelimiter(Delimiter::Bracket),
-                '{' => Token::OpenDelimiter(Delimiter::Brace),
-                ')' => Token::CloseDelimiter(Delimiter::Paren),
-                ']' => Token::CloseDelimiter(Delimiter::Bracket),
-                '}' => Token::CloseDelimiter(Delimiter::Brace),
-                '=' if cursor.shift_if_eq('>') => Token::Arrow,
-                '=' if cursor.shift_if_eq('=') => Token::EqEq,
-                '=' if cursor.shift_if_eq('!') => Token::NeEq,
-                '=' => Token::Eq,
-                '+' if cursor.shift_if_eq('+') => Token::PlusPlus,
-                '+' if cursor.shift_if_eq('=') => Token::PlusEq,
-                '+' => Token::Plus,
-                '-' if cursor.shift_if_eq('>') => Token::Arrow,
-                '-' => Token::Minus,
-                '>' if cursor.shift_if_eq('=') => Token::GreaterThan,
+                '&' if cursor.shift_if_eq('&') => And,
+                '&' => BitAnd,
+                '%' => Rem,
+                '!' if cursor.shift_if_eq('=') => BangEq,
+                '(' => OpenDelimiter(Delimiter::Paren),
+                '[' => OpenDelimiter(Delimiter::Bracket),
+                '{' => OpenDelimiter(Delimiter::Brace),
+                ')' => CloseDelimiter(Delimiter::Paren),
+                ']' => CloseDelimiter(Delimiter::Bracket),
+                '}' => CloseDelimiter(Delimiter::Brace),
+                '=' if cursor.shift_if_eq('>') => Arrow,
+                '=' if cursor.shift_if_eq('=') => EqEq,
+                '=' if cursor.shift_if_eq('!') => NeEq,
+                '=' => Eq,
+                '+' if cursor.shift_if_eq('+') => PlusPlus,
+                '+' if cursor.shift_if_eq('=') => PlusEq,
+                '+' => Plus,
+                '-' if cursor.shift_if_eq('>') => Arrow,
+                '-' => Minus,
+                '>' if cursor.shift_if_eq('=') => GreaterThan,
                 '/' if cursor.shift_if_eq('/') => {
                     cursor.shift_while(|ch| !classes::is_newline(ch));
-                    Token::Comment
+                    Comment
                 }
-                '/' => Token::Slash,
-                '*' => Token::Star,
+                '/' => Slash,
+                '*' => Star,
                 '"' => {
                     scan_string(first_char, &mut cursor);
-                    Token::String
+                    String
                 }
                 '\'' => scan_lifetime_or_char(&mut cursor),
                 _ if classes::is_newline(first_char) => {
                     cursor.shift_while(classes::is_newline);
-                    Token::Newline
+                    Newline
                 }
                 _ if classes::is_whitespace(first_char) => {
                     cursor.shift_while(classes::is_whitespace);
-                    Token::Whitespace
+                    Whitespace
                 }
-                _ => Token::Unknown,
+                _ => Unknown,
             };
 
             let len = cursor.reset_len();
@@ -324,7 +338,7 @@ mod tests {
                 Whitespace at (8, 9)
                 Slash at (9, 10)
                 Whitespace at (10, 11)
-                Unknown at (11, 12)
+                Rem at (11, 12)
                 Whitespace at (12, 13)
                 Eq at (13, 14)
                 Whitespace at (14, 15)
@@ -341,15 +355,14 @@ mod tests {
                 Whitespace at (27, 28)
                 GreaterThan at (28, 30)
                 Whitespace at (30, 31)
-                Unknown at (31, 32)
-                Unknown at (32, 33)
+                And at (31, 33)
                 Whitespace at (33, 34)
                 Unknown at (34, 35)
                 Unknown at (35, 36)
                 Whitespace at (36, 37)
                 Unknown at (37, 38)
                 Whitespace at (38, 39)
-                Unknown at (39, 40)
+                BitAnd at (39, 40)
                 Whitespace at (40, 41)
                 Unknown at (41, 42)
                 Whitespace at (42, 43)
