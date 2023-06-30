@@ -139,12 +139,10 @@ mod tests {
         assert_eq!(with_extension(&path, "expected"), expected);
     }
 
-    fn read_to_string(path: PathBuf) -> Result<String, std::fs::File> {
+    fn read_or_create(path: PathBuf, fallback: &str) -> String {
         match std::fs::read_to_string(&path) {
-            Ok(t) => Ok(t),
-            Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
-                Err(std::fs::File::create(path).unwrap())
-            }
+            Ok(value) => value,
+            Err(err) if err.kind() == std::io::ErrorKind::NotFound => fallback.to_owned(),
             Err(err) => panic!("{err:?}"),
         }
     }
@@ -153,13 +151,7 @@ mod tests {
     fn tests() {
         traverse("tests/assets", |input, expected| {
             let input = format(&std::fs::read_to_string(input).unwrap());
-            let expected = match read_to_string(expected) {
-                Ok(t) => t,
-                Err(mut file) => {
-                    write!(file, "{input}").unwrap();
-                    return;
-                }
-            };
+            let expected = read_or_create(expected, &input);
 
             assert_eq!(input, expected);
 
