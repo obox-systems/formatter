@@ -142,7 +142,10 @@ mod tests {
     fn read_or_create(path: PathBuf, fallback: &str) -> String {
         match std::fs::read_to_string(&path) {
             Ok(value) => value,
-            Err(err) if err.kind() == std::io::ErrorKind::NotFound => fallback.to_owned(),
+            Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
+                std::fs::write(path, fallback).unwrap();
+                fallback.to_owned()
+            }
             Err(err) => panic!("{err:?}"),
         }
     }
