@@ -99,6 +99,10 @@ mod tests {
     use super::format;
     use pretty_assertions::assert_eq;
 
+    fn update_expect() -> bool {
+        std::env::var("UPDATE_EXPECT").is_ok()
+    }
+
     fn with_extension(path: &PathBuf, extension: &str) -> PathBuf {
         match path.extension() {
             Some(raw_extension) => {
@@ -140,12 +144,20 @@ mod tests {
     }
 
     fn read_or_create(path: PathBuf, fallback: &str) -> String {
+        let fallback = || {
+            std::fs::write(&path, fallback).unwrap();
+            fallback.to_owned()
+        };
+
         match std::fs::read_to_string(&path) {
-            Ok(value) => value,
-            Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
-                std::fs::write(path, fallback).unwrap();
-                fallback.to_owned()
+            Ok(value) => {
+                if update_expect() {
+                    return fallback();
+                }
+
+                value
             }
+            Err(err) if err.kind() == std::io::ErrorKind::NotFound => fallback(),
             Err(err) => panic!("{err:?}"),
         }
     }
