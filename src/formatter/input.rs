@@ -119,27 +119,27 @@ impl<'me> Input<'me> {
 
         while let Some(first_char) = cursor.shift() {
             let token = match first_char {
-                '&' if cursor.shift_if_eq('&') => And,
+                '&' if cursor.shift_if('&') => And,
                 '&' => BitAnd,
                 '%' => Rem,
-                '!' if cursor.shift_if_eq('=') => BangEq,
+                '!' if cursor.shift_if('=') => BangEq,
                 '(' => OpenDelimiter(Delimiter::Paren),
                 '[' => OpenDelimiter(Delimiter::Bracket),
                 '{' => OpenDelimiter(Delimiter::Brace),
                 ')' => CloseDelimiter(Delimiter::Paren),
                 ']' => CloseDelimiter(Delimiter::Bracket),
                 '}' => CloseDelimiter(Delimiter::Brace),
-                '=' if cursor.shift_if_eq('>') => Arrow,
-                '=' if cursor.shift_if_eq('=') => EqEq,
-                '=' if cursor.shift_if_eq('!') => NeEq,
+                '=' if cursor.shift_if('>') => Arrow,
+                '=' if cursor.shift_if('=') => EqEq,
+                '=' if cursor.shift_if('!') => NeEq,
                 '=' => Eq,
-                '+' if cursor.shift_if_eq('+') => PlusPlus,
-                '+' if cursor.shift_if_eq('=') => PlusEq,
+                '+' if cursor.shift_if('+') => PlusPlus,
+                '+' if cursor.shift_if('=') => PlusEq,
                 '+' => Plus,
-                '-' if cursor.shift_if_eq('>') => Arrow,
+                '-' if cursor.shift_if('>') => Arrow,
                 '-' => Minus,
-                '>' if cursor.shift_if_eq('=') => GreaterThan,
-                '/' if cursor.shift_if_eq('/') => {
+                '>' if cursor.shift_if('=') => GreaterThan,
+                '/' if cursor.shift_if('/') => {
                     cursor.shift_while(|ch| !classes::is_newline(ch));
                     Comment
                 }
@@ -245,10 +245,10 @@ impl<'me> InputBuilder<'me> {
 }
 
 fn scan_lifetime_or_char(cursor: &mut Cursor) -> Token {
-    if cursor.shift_cls(classes::is_xid_start) {
+    if cursor.shift_if(classes::is_xid_start) {
         cursor.shift_while(classes::is_xid_continue);
 
-        if cursor.shift_if_eq('\'') {
+        if cursor.shift_if('\'') {
             Token::Char
         } else {
             Token::Lifetime
@@ -265,9 +265,7 @@ fn scan_string(c: char, cursor: &mut Cursor) {
         match c {
             '\\' => {
                 cursor.shift();
-                if cursor.matches('\\') || cursor.matches(quote_type) {
-                    cursor.shift();
-                }
+                cursor.shift_if(|ch| ch == '\\' || ch == quote_type);
             }
             c if c == quote_type => {
                 cursor.shift();
@@ -280,22 +278,20 @@ fn scan_string(c: char, cursor: &mut Cursor) {
     }
 }
 
-fn scan_char(ptr: &mut Cursor) {
-    while let Some(c) = ptr.peek() {
+fn scan_char(cursor: &mut Cursor) {
+    while let Some(c) = cursor.peek() {
         match c {
             '\\' => {
-                ptr.shift();
-                if ptr.matches('\\') || ptr.matches('\'') {
-                    ptr.shift();
-                }
+                cursor.shift();
+                cursor.shift_if(|ch| ch == '\\' || ch == '\'');
             }
             '\'' => {
-                ptr.shift();
+                cursor.shift();
                 return;
             }
             '\n' => return,
             _ => {
-                ptr.shift();
+                cursor.shift();
             }
         }
     }
