@@ -1,7 +1,15 @@
 use wca::Context;
 
 #[derive(Clone)]
-pub(crate) struct Config {}
+struct Delimiter {
+    close: char,
+    open: char,
+}
+
+#[derive(Clone)]
+pub(crate) struct Config {
+    delimiters: Vec<Delimiter>,
+}
 
 pub(crate) trait HasConfig {
     fn config(&self) -> &Config;
