@@ -12,6 +12,7 @@ use crate::stdx::CommandExt;
 mod commands;
 mod formatter;
 mod stdx;
+mod traits;
 
 pub(crate) type Result<T = (), E = miette::Report> = miette::Result<T, E>;
 
