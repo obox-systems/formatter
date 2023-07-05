@@ -10,7 +10,7 @@
 use crate::stdx::CommandExt;
 
 mod commands;
-mod formatter;
+pub(crate) mod formatter;
 mod stdx;
 mod traits;
 

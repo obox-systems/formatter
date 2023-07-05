@@ -1,14 +1,27 @@
+use std::collections::HashMap;
+
 use wca::Context;
 
-#[derive(Clone)]
-struct Delimiter {
-    close: char,
-    open: char,
-}
+use crate::formatter::input::{Delimiter, Token};
 
 #[derive(Clone)]
 pub(crate) struct Config {
-    delimiters: Vec<Delimiter>,
+    pub(crate) delimiters: HashMap<char, Token>,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        let mut delimiters = HashMap::new();
+
+        delimiters.insert('(', Token::OpenDelimiter(Delimiter::Paren));
+        delimiters.insert(')', Token::CloseDelimiter(Delimiter::Paren));
+        delimiters.insert('{', Token::OpenDelimiter(Delimiter::Brace));
+        delimiters.insert('}', Token::CloseDelimiter(Delimiter::Brace));
+        delimiters.insert('[', Token::OpenDelimiter(Delimiter::Bracket));
+        delimiters.insert(']', Token::CloseDelimiter(Delimiter::Bracket));
+
+        Self { delimiters }
+    }
 }
 
 pub(crate) trait HasConfig {

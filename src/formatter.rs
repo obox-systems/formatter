@@ -2,7 +2,7 @@ use self::input::{Delimiter, Input, Token};
 
 mod classes;
 mod cursor;
-mod input;
+pub(crate) mod input;
 
 #[derive(Default)]
 struct Emitter {

@@ -1,5 +1,7 @@
 use std::cell::Cell;
 
+use crate::traits::Config;
+
 use super::{classes, cursor::Cursor};
 
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
@@ -114,51 +116,50 @@ impl<'me> Input<'me> {
     pub(crate) fn of(source: &'me str) -> Self {
         use Token::*;
 
+        let config = Config::default();
         let mut builder = InputBuilder::new(source);
         let mut cursor = Cursor::new(source);
 
         while let Some(first_char) = cursor.shift() {
-            let token = match first_char {
-                '&' if cursor.shift_if('&') => And,
-                '&' => BitAnd,
-                '%' => Rem,
-                '!' if cursor.shift_if('=') => BangEq,
-                '(' => OpenDelimiter(Delimiter::Paren),
-                '[' => OpenDelimiter(Delimiter::Bracket),
-                '{' => OpenDelimiter(Delimiter::Brace),
-                ')' => CloseDelimiter(Delimiter::Paren),
-                ']' => CloseDelimiter(Delimiter::Bracket),
-                '}' => CloseDelimiter(Delimiter::Brace),
-                '=' if cursor.shift_if('>') => Arrow,
-                '=' if cursor.shift_if('=') => EqEq,
-                '=' if cursor.shift_if('!') => NeEq,
-                '=' => Eq,
-                '+' if cursor.shift_if('+') => PlusPlus,
-                '+' if cursor.shift_if('=') => PlusEq,
-                '+' => Plus,
-                '-' if cursor.shift_if('>') => Arrow,
-                '-' => Minus,
-                '>' if cursor.shift_if('=') => GreaterThan,
-                '/' if cursor.shift_if('/') => {
-                    cursor.shift_while(|ch| !classes::is_newline(ch));
-                    Comment
+            let token = if let Some(token) = config.delimiters.get(&first_char) {
+                *token
+            } else {
+                match first_char {
+                    '&' if cursor.shift_if('&') => And,
+                    '&' => BitAnd,
+                    '%' => Rem,
+                    '!' if cursor.shift_if('=') => BangEq,
+                    '=' if cursor.shift_if('>') => Arrow,
+                    '=' if cursor.shift_if('=') => EqEq,
+                    '=' if cursor.shift_if('!') => NeEq,
+                    '=' => Eq,
+                    '+' if cursor.shift_if('+') => PlusPlus,
+                    '+' if cursor.shift_if('=') => PlusEq,
+                    '+' => Plus,
+                    '-' if cursor.shift_if('>') => Arrow,
+                    '-' => Minus,
+                    '>' if cursor.shift_if('=') => GreaterThan,
+                    '/' if cursor.shift_if('/') => {
+                        cursor.shift_while(|ch| !classes::is_newline(ch));
+                        Comment
+                    }
+                    '/' => Slash,
+                    '*' => Star,
+                    '"' => {
+                        scan_string(first_char, &mut cursor);
+                        String
+                    }
+                    '\'' => scan_lifetime_or_char(&mut cursor),
+                    _ if classes::is_newline(first_char) => {
+                        cursor.shift_while(classes::is_newline);
+                        Newline
+                    }
+                    _ if classes::is_whitespace(first_char) => {
+                        cursor.shift_while(classes::is_whitespace);
+                        Whitespace
+                    }
+                    _ => Unknown,
                 }
-                '/' => Slash,
-                '*' => Star,
-                '"' => {
-                    scan_string(first_char, &mut cursor);
-                    String
-                }
-                '\'' => scan_lifetime_or_char(&mut cursor),
-                _ if classes::is_newline(first_char) => {
-                    cursor.shift_while(classes::is_newline);
-                    Newline
-                }
-                _ if classes::is_whitespace(first_char) => {
-                    cursor.shift_while(classes::is_whitespace);
-                    Whitespace
-                }
-                _ => Unknown,
             };
 
             let len = cursor.reset_len();
