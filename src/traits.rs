@@ -9,6 +9,7 @@ pub(crate) trait HasConfig {
 
 impl HasConfig for Context {
     fn config(&self) -> &Config {
+        // ! Unsafe !
         match self.get_ref() {
             Some(config) => config,
             None => {
