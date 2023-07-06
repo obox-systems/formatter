@@ -4,7 +4,7 @@ use crate::traits::Config;
 
 use super::{classes, cursor::Cursor};
 
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+#[derive(serde::Deserialize, PartialEq, Eq, Clone, Copy, Debug)]
 #[non_exhaustive]
 pub(crate) enum Token {
     /// `(`, `[`, `{`
@@ -94,7 +94,7 @@ impl Token {
     }
 }
 
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+#[derive(serde::Deserialize, PartialEq, Eq, Clone, Copy, Debug)]
 pub(crate) enum Delimiter {
     /// `(`, `)`
     Paren,

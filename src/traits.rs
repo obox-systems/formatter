@@ -4,7 +4,7 @@ use wca::Context;
 
 use crate::formatter::input::{Delimiter, Token};
 
-#[derive(Clone)]
+#[derive(Clone, serde::Deserialize)]
 pub(crate) struct Config {
     pub(crate) delimiters: HashMap<char, Token>,
 }
@@ -42,5 +42,6 @@ impl HasConfig for Context {
 }
 
 fn load_config() -> Config {
-    todo!()
+    let path = std::fs::read_to_string("profile.toml").unwrap();
+    toml::from_str(&path).unwrap()
 }

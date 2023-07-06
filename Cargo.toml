@@ -9,6 +9,8 @@ miette = { version = "5.9", features = ["fancy"] }
 wca = { version = "0.1", git = "https://github.com/Wandalen/wTools.git", branch = "alpha" }
 jwalk = "0.8"
 unicode-ident = "1.0"
+toml = "0.7"
+serde = { version = "1", features = ["derive"] }
 
 [dev-dependencies]
 pretty_assertions = "1.2"
