@@ -7,6 +7,7 @@ pub(crate) mod input;
 #[derive(Default)]
 struct Emitter {
     output: String,
+    lvl: usize,
 }
 
 impl Emitter {
@@ -20,6 +21,11 @@ impl Emitter {
 
     fn whitespace(&mut self) {
         self.output.push(' ');
+    }
+
+    fn indent(&mut self) {
+        let s = " ".repeat(self.lvl);
+        self.output.push_str(&s);
     }
 
     fn finish(self) -> String {
@@ -73,19 +79,28 @@ impl Emitter {
 
 pub(crate) fn format(source: &str) -> String {
     let input = Input::of(source);
+
     let mut emitter = Emitter::default();
+    emitter.lvl = 1;
 
     for token in input.iter() {
-        emitter.before(token, &input);
-
-        let raw = input.slice();
-        let slice = if token == Token::Whitespace && raw.len() > 2 {
-            "  "
-        } else {
-            raw
+        match token {
+            Token::OpenDelimiter(Delimiter::Brace) => emitter.lvl += 1,
+            Token::CloseDelimiter(Delimiter::Brace) => emitter.lvl -= 1,
+            _ => {}
         };
 
-        emitter.raw(slice);
+        emitter.before(token, &input);
+
+        if token == Token::Newline && input.peek() == Token::Whitespace {
+            emitter.newline();
+            emitter.indent();
+            input.next();
+            continue;
+        }
+
+        let raw = input.slice();
+        emitter.raw(raw);
         emitter.after(token, &input);
     }
 
