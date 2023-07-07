@@ -78,6 +78,7 @@ impl Emitter {
     }
 }
 
+#[allow(clippy::field_reassign_with_default)]
 pub(crate) fn format(source: &str) -> String {
     let input = Input::of(source);
 
