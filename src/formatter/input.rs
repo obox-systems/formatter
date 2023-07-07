@@ -49,6 +49,9 @@ pub(crate) enum Token {
     /// `->`, `=>`
     Arrow,
 
+    /// `:`
+    Colon,
+
     /// `'me`
     Lifetime,
 
@@ -125,6 +128,7 @@ impl<'me> Input<'me> {
                 *token
             } else {
                 match first_char {
+                    ':' => Colon,
                     '&' if cursor.shift_if('&') => And,
                     '&' => BitAnd,
                     '%' => Rem,
