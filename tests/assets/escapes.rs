@@ -11,9 +11,9 @@ fn main() {
                 unicode_codepoint, character_name );
 
 
-    let long_string = "String literals
-                        can span multiple lines.
-                        The linebreak and indentation here ->\
-                        <- can be escaped too!";
+    let long_string = "(String literals)
+                        [can span multiple lines]
+                        {The linebreak and indentation here}
+                        (can be escaped too)";
     println!("{}", long_string);
 }
