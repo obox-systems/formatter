@@ -11,6 +11,7 @@ struct Emitter {
 }
 
 impl Emitter {
+    #[allow(dead_code)]
     fn newline(&mut self) {
         self.output.push('\n');
     }
@@ -53,7 +54,8 @@ impl Emitter {
             Token::OpenDelimiter(Delimiter::Brace)
                 if !matches!(input.prev(), Token::Newline | Token::Empty) =>
             {
-                self.newline()
+                // self.newline();
+                //self.indent(None);
             }
             _ if current.maybe_binary_operator() && input.prev() != Token::Whitespace => {
                 self.whitespace()
@@ -212,6 +214,6 @@ mod tests {
 
     #[test]
     fn pg() {
-        println!("{:?}", format("{}"));
+        println!("{}", format("fn name() {}"));
     }
 }

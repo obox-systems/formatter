@@ -1,5 +1,4 @@
-float noise ( in vec2 st )
-{
+float noise ( in vec2 st ){
   vec2 i = floor( st );
   vec2 f = fract( st );
 
