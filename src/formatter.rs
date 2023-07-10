@@ -11,6 +11,7 @@ struct Emitter {
 }
 
 impl Emitter {
+    #[allow(dead_code)]
     fn newline(&mut self) {
         self.output.push('\n');
     }
