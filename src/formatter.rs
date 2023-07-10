@@ -52,7 +52,7 @@ impl Emitter {
             }
             Token::OpenDelimiter(Delimiter::Brace) if input.prev() == Token::Colon => {}
             Token::OpenDelimiter(Delimiter::Brace)
-                if !matches!(dbg!(input.prev()), Token::Newline | Token::Empty) =>
+                if !matches!(input.prev(), Token::Newline | Token::Empty) =>
             {
                 self.newline()
             }
