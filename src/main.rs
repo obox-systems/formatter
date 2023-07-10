@@ -11,6 +11,7 @@ use crate::stdx::CommandExt;
 
 mod commands;
 pub(crate) mod formatter;
+pub(crate) mod highlight;
 mod stdx;
 mod traits;
 
@@ -24,6 +25,7 @@ fn main() -> Result {
     let aggregator = stdx::cli()
         .command(commands::format)
         .command(commands::with.arg("path", Type::Path))
+        .command(commands::highlight)
         .build();
 
     let args = std::env::args().skip(1).join(" ");

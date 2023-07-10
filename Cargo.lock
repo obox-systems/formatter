@@ -123,6 +123,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "colored"
+version = "2.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2674ec482fbc38012cf31e6c42ba0177b431a0cb6f15fe40efa5aab1bda516f6"
+dependencies = [
+ "is-terminal",
+ "lazy_static",
+ "windows-sys",
+]
+
+[[package]]
 name = "convert_case"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -326,6 +337,7 @@ source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a2
 name = "formatter"
 version = "0.1.0"
 dependencies = [
+ "colored",
  "expect-test",
  "itertools 0.11.0",
  "jwalk",
@@ -500,6 +512,12 @@ dependencies = [
  "crossbeam",
  "rayon",
 ]
+
+[[package]]
+name = "lazy_static"
+version = "1.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "lexical"

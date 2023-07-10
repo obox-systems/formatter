@@ -54,3 +54,17 @@ pub(crate) fn with(cx: Context, args: Args, _props: Props) -> Result {
 
     Ok(())
 }
+
+pub(crate) fn highlight(cx: Context, _args: Args, _props: Props) -> Result {
+    let path = cx.get_ref::<PathBuf>().unwrap();
+
+    let input = std::fs::read_to_string(path)
+        .into_diagnostic()
+        .with_context(|| format!("reading `{}`", path.display()))?;
+
+    let input = crate::highlight::highlight(&input);
+
+    println!("{input}");
+
+    Ok(())
+}

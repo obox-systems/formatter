@@ -1,5 +1,7 @@
 use std::cell::Cell;
 
+use colored::Color;
+
 use crate::traits::Config;
 
 use super::{classes, cursor::Cursor};
@@ -84,6 +86,21 @@ impl Token {
                 | Self::Star
                 | Self::GreaterThan
         )
+    }
+
+    pub(crate) fn color(&self) -> Color {
+        match self {
+            Self::OpenDelimiter(_) => Color::BrightBlack,
+            Self::CloseDelimiter(_) => Color::BrightBlack,
+            Self::String => Color::BrightMagenta,
+            Self::Whitespace => Color::White,
+            Self::Newline => Color::BrightRed,
+            Self::Unknown => Color::Black,
+            Self::Comment => Color::Cyan,
+            Self::Char => Color::Blue,
+            Self::Eof => todo!(),
+            _ => Color::Green,
+        }
     }
 }
 
