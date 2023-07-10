@@ -109,7 +109,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "clone_dyn"
 version = "0.1.0"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "clone_dyn_meta",
 ]
@@ -117,7 +117,7 @@ dependencies = [
 [[package]]
 name = "clone_dyn_meta"
 version = "0.1.1"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "proc_macro_tools",
 ]
@@ -225,7 +225,7 @@ dependencies = [
 [[package]]
 name = "data_type"
 version = "0.1.9"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "either",
  "type_constructor",
@@ -248,7 +248,7 @@ dependencies = [
 [[package]]
 name = "derive_tools"
 version = "0.1.5"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "clone_dyn",
  "derive_more",
@@ -259,7 +259,7 @@ dependencies = [
 [[package]]
 name = "diagnostics_tools"
 version = "0.1.4"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "pretty_assertions",
 ]
@@ -312,7 +312,7 @@ dependencies = [
 [[package]]
 name = "error_tools"
 version = "0.1.5"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "anyhow",
  "thiserror",
@@ -331,7 +331,7 @@ dependencies = [
 [[package]]
 name = "for_each"
 version = "0.1.4"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "formatter"
@@ -352,7 +352,7 @@ dependencies = [
 [[package]]
 name = "former"
 version = "0.1.12"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "former_meta",
  "former_runtime",
@@ -361,7 +361,7 @@ dependencies = [
 [[package]]
 name = "former_meta"
 version = "0.1.12"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "iter_tools",
  "proc-macro2",
@@ -373,7 +373,7 @@ dependencies = [
 [[package]]
 name = "former_runtime"
 version = "0.1.12"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "getrandom"
@@ -422,12 +422,12 @@ checksum = "443144c8cdadd93ebf52ddb4056d257f5b52c04d3c804e657d19eb73fc33668b"
 [[package]]
 name = "implements"
 version = "0.1.2"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "impls_index"
 version = "0.1.4"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "impls_index_meta",
 ]
@@ -435,7 +435,7 @@ dependencies = [
 [[package]]
 name = "impls_index_meta"
 version = "0.1.2"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "proc_macro_tools",
 ]
@@ -453,13 +453,13 @@ dependencies = [
 [[package]]
 name = "inspect_type"
 version = "0.1.3"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "is-terminal"
-version = "0.4.8"
+version = "0.4.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "24fddda5af7e54bf7da53067d6e802dbcc381d0a8eef629df528e3ebf68755cb"
+checksum = "cb0889898416213fab133e1d33a0e5858a48177452750691bde3666d0fdbaf8b"
 dependencies = [
  "hermit-abi",
  "rustix",
@@ -475,12 +475,12 @@ checksum = "616cde7c720bb2bb5824a224687d8f77bfd38922027f01d825cd7453be5099fb"
 [[package]]
 name = "is_slice"
 version = "0.1.1"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "iter_tools"
 version = "0.1.4"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "itertools 0.10.5",
 ]
@@ -619,7 +619,7 @@ checksum = "b06a4cde4c0f271a446782e3eff8de789548ce57dbc8eca9292c27f4a42004b4"
 [[package]]
 name = "mem_tools"
 version = "0.1.1"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "memchr"
@@ -639,7 +639,7 @@ dependencies = [
 [[package]]
 name = "meta_tools"
 version = "0.2.18"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "for_each",
  "former",
@@ -653,7 +653,7 @@ dependencies = [
 [[package]]
 name = "meta_tools_min"
 version = "0.2.13"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "for_each",
  "impls_index",
@@ -691,7 +691,7 @@ checksum = "4901771e1d44ddb37964565c654a3223ba41a594d02b8da471cc4464912b5cfa"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.23",
+ "syn 2.0.25",
 ]
 
 [[package]]
@@ -712,7 +712,7 @@ dependencies = [
 [[package]]
 name = "mod_interface"
 version = "0.1.16"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "mod_interface_meta",
  "mod_interface_runtime",
@@ -721,7 +721,7 @@ dependencies = [
 [[package]]
 name = "mod_interface_meta"
 version = "0.1.11"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "derive_tools",
  "proc_macro_tools",
@@ -730,7 +730,7 @@ dependencies = [
 [[package]]
 name = "mod_interface_runtime"
 version = "0.1.2"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "nom"
@@ -884,9 +884,9 @@ checksum = "dc375e1527247fe1a97d8b7156678dfe7c1af2fc075c9a4db3690ecd2a148068"
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.63"
+version = "1.0.64"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b368fba921b0dce7e60f5e04ec15e565b3303972b42bcfde1d0713b881959eb"
+checksum = "78803b62cbf1f46fde80d7c0e803111524b9877184cfe7c3033659490ac7a7da"
 dependencies = [
  "unicode-ident",
 ]
@@ -894,7 +894,7 @@ dependencies = [
 [[package]]
 name = "proc_macro_tools"
 version = "0.1.18"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -966,9 +966,9 @@ dependencies = [
 
 [[package]]
 name = "regex"
-version = "1.9.0"
+version = "1.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "89089e897c013b3deb627116ae56a6955a72b8bed395c9526af31c9fe528b484"
+checksum = "b2eae68fc220f7cf2532e4494aded17545fce192d59cd996e0fe7887f4ceb575"
 dependencies = [
  "aho-corasick",
  "memchr",
@@ -978,9 +978,9 @@ dependencies = [
 
 [[package]]
 name = "regex-automata"
-version = "0.3.0"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa250384981ea14565685dea16a9ccc4d1c541a13f82b9c168572264d1df8c56"
+checksum = "83d3daa6976cffb758ec878f108ba0e062a45b2d6ca3a2cca965338855476caf"
 dependencies = [
  "aho-corasick",
  "memchr",
@@ -1047,22 +1047,22 @@ checksum = "bebd363326d05ec3e2f532ab7660680f3b02130d780c299bca73469d521bc0ed"
 
 [[package]]
 name = "serde"
-version = "1.0.166"
+version = "1.0.171"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d01b7404f9d441d3ad40e6a636a7782c377d2abdbe4fa2440e2edcc2f4f10db8"
+checksum = "30e27d1e4fd7659406c492fd6cfaf2066ba8773de45ca75e855590f856dc34a9"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.166"
+version = "1.0.171"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5dd83d6dde2b6b2d466e14d9d1acce8816dedee94f735eac6395808b3483c6d6"
+checksum = "389894603bd18c46fa56231694f8d827779c0951a667087194cf9de94ed24682"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.23",
+ "syn 2.0.25",
 ]
 
 [[package]]
@@ -1095,7 +1095,7 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 [[package]]
 name = "strs_tools"
 version = "0.1.8"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "former",
  "lexical",
@@ -1188,9 +1188,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.23"
+version = "2.0.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "59fb7d6d8281a51045d62b8eb3a7d1ce347b76f312af50cd3dc0af39c87c1737"
+checksum = "15e3fc8c0c74267e2df136e5e5fb656a464158aa57624053375eb9c8c6e25ae2"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1220,28 +1220,28 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "1.0.41"
+version = "1.0.43"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c16a64ba9387ef3fdae4f9c1a7f07a0997fce91985c0336f1ddc1822b3b37802"
+checksum = "a35fc5b8971143ca348fa6df4f024d4d55264f3468c71ad1c2f365b0a4d58c42"
 dependencies = [
  "thiserror-impl",
 ]
 
 [[package]]
 name = "thiserror-impl"
-version = "1.0.41"
+version = "1.0.43"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d14928354b01c4d6a4f0e549069adef399a284e7995c7ccca94e8a07a5346c59"
+checksum = "463fe12d7993d3b327787537ce8dd4dfa058de32fc2b195ef3cde03dc4771e8f"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.23",
+ "syn 2.0.25",
 ]
 
 [[package]]
 name = "time_tools"
 version = "0.1.5"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "toml"
@@ -1280,7 +1280,7 @@ dependencies = [
 [[package]]
 name = "type_constructor"
 version = "0.1.20"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "type_constructor_derive_make_meta",
  "type_constructor_derive_pair_meta",
@@ -1289,7 +1289,7 @@ dependencies = [
 [[package]]
 name = "type_constructor_derive_make_meta"
 version = "0.1.0"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1299,7 +1299,7 @@ dependencies = [
 [[package]]
 name = "type_constructor_derive_pair_meta"
 version = "0.1.0"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1309,7 +1309,7 @@ dependencies = [
 [[package]]
 name = "typing_tools"
 version = "0.1.5"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "implements",
  "inspect_type",
@@ -1353,7 +1353,7 @@ checksum = "9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423"
 [[package]]
 name = "wca"
 version = "0.1.3"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "anymap",
  "former",
@@ -1452,9 +1452,9 @@ checksum = "1a515f5799fe4961cb532f983ce2b23082366b898e52ffbce459c86f67c8378a"
 
 [[package]]
 name = "winnow"
-version = "0.4.8"
+version = "0.4.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a9482fe6ceabdf32f3966bfdd350ba69256a97c30253dc616fe0005af24f164e"
+checksum = "81a2094c43cc94775293eaa0e499fbc30048a6d824ac82c0351a8c0bf9112529"
 dependencies = [
  "memchr",
 ]
@@ -1462,12 +1462,12 @@ dependencies = [
 [[package]]
 name = "winterval"
 version = "0.1.6"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 
 [[package]]
 name = "woptions"
 version = "0.1.4"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "former",
  "woptions_meta",
@@ -1477,7 +1477,7 @@ dependencies = [
 [[package]]
 name = "woptions_meta"
 version = "0.1.4"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "convert_case 0.5.0",
  "iter_tools",
@@ -1488,7 +1488,7 @@ dependencies = [
 [[package]]
 name = "woptions_runtime"
 version = "0.1.4"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "former",
 ]
@@ -1496,7 +1496,7 @@ dependencies = [
 [[package]]
 name = "wtools"
 version = "0.2.20"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#3980a95777d4a28b215e889635c53a1f99019bb9"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
 dependencies = [
  "data_type",
  "derive_tools",

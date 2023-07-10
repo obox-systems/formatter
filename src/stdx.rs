@@ -134,32 +134,6 @@ fn array_push<const N: usize, T>(this: [T; N], item: T) -> [T; N + 1] {
 }
 
 #[macro_export]
-macro_rules! parse_args {
-    ($args:ident, mut $b:ident: $ty:ident $( $rest:tt )* ) => {
-        let mut $b: $ty = std::convert::TryFrom::try_from($args.next().unwrap()).unwrap();
-        parse_args!($args $( $rest )* )
-    };
-    ($args:ident, $b:ident: $ty:ident $( $rest:tt )* ) => {
-        let $b: $ty = std::convert::TryFrom::try_from($args.next().unwrap()).unwrap();
-        parse_args!($args $( $rest )* )
-    };
-    ($args:ident, $b:ident $( $rest:tt )* ) => {
-        let $b = $args.next().unwrap();
-        parse_args!($args $( $rest )* )
-    };
-    ($args:ident, mut $b:ident $( $rest:tt )* ) => {
-        let mut $b = $args.next().unwrap();
-        parse_args!($args $( $rest )* )
-    };
-    ($args:ident) => {
-        assert!($args.next().is_none());
-    };
-    ($args:ident,) => {
-        parse_args!($args)
-    };
-}
-
-#[macro_export]
 macro_rules! static_assert_size {
     ($ty:ty, $size:expr) => {
         const _: [(); $size] = [(); ::std::mem::size_of::<$ty>()];
