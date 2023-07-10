@@ -24,8 +24,8 @@ impl<'me> Cursor<'me> {
     /// Checks if the given character `ch` is present in the current state of `self`.
     /// If `ch` is present, shifts the internal state of `self` and returns `true`,
     /// otherwise returns `false`.
-    pub(crate) fn shift_if_eq(&mut self, ch: char) -> bool {
-        let is_present = self.matches(ch);
+    pub(crate) fn shift_if(&mut self, edible: impl Edible) -> bool {
+        let is_present = self.matches(edible);
         if is_present {
             self.shift();
         }
@@ -45,11 +45,23 @@ impl<'me> Cursor<'me> {
         len
     }
 
-    pub(crate) fn matches(&self, ch: char) -> bool {
-        self.peek() == Some(ch)
+    pub(crate) fn matches(&self, edible: impl Edible) -> bool {
+        self.peek().is_some_and(|ch| edible.test(ch))
     }
+}
 
-    pub(crate) fn shift_cls(&self, f: impl Fn(char) -> bool) -> bool {
-        self.peek().is_some_and(f)
+pub(crate) trait Edible {
+    fn test(self, ch: char) -> bool;
+}
+
+impl Edible for char {
+    fn test(self, ch: char) -> bool {
+        self == ch
+    }
+}
+
+impl<F: Fn(char) -> bool> Edible for F {
+    fn test(self, ch: char) -> bool {
+        self(ch)
     }
 }

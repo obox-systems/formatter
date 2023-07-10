@@ -2,11 +2,12 @@ use self::input::{Delimiter, Input, Token};
 
 mod classes;
 mod cursor;
-mod input;
+pub(crate) mod input;
 
 #[derive(Default)]
 struct Emitter {
     output: String,
+    lvl: usize,
 }
 
 impl Emitter {
@@ -20,6 +21,11 @@ impl Emitter {
 
     fn whitespace(&mut self) {
         self.output.push(' ');
+    }
+
+    fn indent(&mut self) {
+        let s = " ".repeat(self.lvl);
+        self.output.push_str(&s);
     }
 
     fn finish(self) -> String {
@@ -41,6 +47,7 @@ impl Emitter {
                     }
                 }
             }
+            Token::OpenDelimiter(Delimiter::Brace) if input.prev() == Token::Colon => {}
             Token::OpenDelimiter(Delimiter::Brace) if input.prev() != Token::Newline => {
                 self.newline()
             }
@@ -71,21 +78,31 @@ impl Emitter {
     }
 }
 
+#[allow(clippy::field_reassign_with_default)]
 pub(crate) fn format(source: &str) -> String {
     let input = Input::of(source);
+
     let mut emitter = Emitter::default();
+    emitter.lvl = 1;
 
     for token in input.iter() {
-        emitter.before(token, &input);
-
-        let raw = input.slice();
-        let slice = if token == Token::Whitespace && raw.len() > 2 {
-            "  "
-        } else {
-            raw
+        match token {
+            Token::OpenDelimiter(Delimiter::Brace) => emitter.lvl += 1,
+            Token::CloseDelimiter(Delimiter::Brace) => emitter.lvl -= 1,
+            _ => {}
         };
 
-        emitter.raw(slice);
+        emitter.before(token, &input);
+
+        if token == Token::Newline && input.peek() == Token::Whitespace {
+            emitter.newline();
+            emitter.indent();
+            input.next();
+            continue;
+        }
+
+        let raw = input.slice();
+        emitter.raw(raw);
         emitter.after(token, &input);
     }
 
@@ -98,6 +115,10 @@ mod tests {
 
     use super::format;
     use pretty_assertions::assert_eq;
+
+    fn update_expect() -> bool {
+        std::env::var("UPDATE_EXPECT").is_ok()
+    }
 
     fn with_extension(path: &PathBuf, extension: &str) -> PathBuf {
         match path.extension() {
@@ -140,22 +161,44 @@ mod tests {
     }
 
     fn read_or_create(path: PathBuf, fallback: &str) -> String {
+        let fallback = || {
+            println!("\x1b[1m\x1b[92mupdating\x1b[0m: {}", path.display());
+            std::fs::write(&path, fallback).unwrap();
+            fallback.to_owned()
+        };
+
         match std::fs::read_to_string(&path) {
-            Ok(value) => value,
-            Err(err) if err.kind() == std::io::ErrorKind::NotFound => fallback.to_owned(),
+            Ok(value) => {
+                if update_expect() {
+                    return fallback();
+                }
+
+                value
+            }
+            Err(err) if err.kind() == std::io::ErrorKind::NotFound => fallback(),
             Err(err) => panic!("{err:?}"),
         }
     }
 
     #[test]
-    fn tests() {
-        traverse("tests/assets", |input, expected| {
+    fn formatter() {
+        traverse("tests/assets/formatter", |input, expected| {
             let input = format(&std::fs::read_to_string(input).unwrap());
             let expected = read_or_create(expected, &input);
 
             assert_eq!(input, expected);
 
             let expected = format(&input);
+            assert_eq!(input, expected);
+        });
+    }
+
+    #[test]
+    fn highlight() {
+        traverse("tests/assets/highlight", |input, expected| {
+            let input = crate::highlight::highlight(&std::fs::read_to_string(input).unwrap());
+            let expected = read_or_create(expected, &input);
+
             assert_eq!(input, expected);
         });
     }

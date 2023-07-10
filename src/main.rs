@@ -1,12 +1,19 @@
 #![allow(incomplete_features)]
 #![feature(generic_const_exprs, internal_output_capture, exit_status_error)]
-#![deny(clippy::use_self, unused_qualifications, unreachable_pub)]
+#![deny(
+    clippy::use_self,
+    clippy::doc_markdown,
+    unused_qualifications,
+    unreachable_pub
+)]
 
 use crate::stdx::CommandExt;
 
 mod commands;
-mod formatter;
+pub(crate) mod formatter;
+pub(crate) mod highlight;
 mod stdx;
+mod traits;
 
 pub(crate) type Result<T = (), E = miette::Report> = miette::Result<T, E>;
 
@@ -18,6 +25,7 @@ fn main() -> Result {
     let aggregator = stdx::cli()
         .command(commands::format)
         .command(commands::with.arg("path", Type::Path))
+        .command(commands::highlight)
         .build();
 
     let args = std::env::args().skip(1).join(" ");

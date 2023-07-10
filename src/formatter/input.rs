@@ -1,8 +1,12 @@
 use std::cell::Cell;
 
+use colored::Color;
+
+use crate::traits::Config;
+
 use super::{classes, cursor::Cursor};
 
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+#[derive(serde::Deserialize, PartialEq, Eq, Clone, Copy, Debug)]
 #[non_exhaustive]
 pub(crate) enum Token {
     /// `(`, `[`, `{`
@@ -13,6 +17,8 @@ pub(crate) enum Token {
     String,
     /// ` `
     Whitespace,
+    /// `r#""#`
+    RawString,
     /// `\n`, `\r`
     Newline,
     /// Unknown symbol
@@ -47,6 +53,9 @@ pub(crate) enum Token {
     /// `->`, `=>`
     Arrow,
 
+    /// `:`
+    Colon,
+
     /// `'me`
     Lifetime,
 
@@ -80,6 +89,22 @@ impl Token {
                 | Self::GreaterThan
         )
     }
+
+    pub(crate) fn color(&self) -> Color {
+        match self {
+            Self::OpenDelimiter(_) => Color::BrightBlack,
+            Self::CloseDelimiter(_) => Color::BrightBlack,
+            Self::String => Color::BrightMagenta,
+            Self::RawString => Color::Magenta,
+            Self::Whitespace => Color::White,
+            Self::Newline => Color::BrightRed,
+            Self::Unknown => Color::Black,
+            Self::Comment => Color::Cyan,
+            Self::Char => Color::Blue,
+            Self::Eof => todo!(),
+            _ => Color::Green,
+        }
+    }
 }
 
 impl Token {
@@ -92,7 +117,7 @@ impl Token {
     }
 }
 
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
+#[derive(serde::Deserialize, PartialEq, Eq, Clone, Copy, Debug)]
 pub(crate) enum Delimiter {
     /// `(`, `)`
     Paren,
@@ -114,51 +139,55 @@ impl<'me> Input<'me> {
     pub(crate) fn of(source: &'me str) -> Self {
         use Token::*;
 
+        let config = Config::default();
         let mut builder = InputBuilder::new(source);
         let mut cursor = Cursor::new(source);
 
         while let Some(first_char) = cursor.shift() {
-            let token = match first_char {
-                '&' if cursor.shift_if_eq('&') => And,
-                '&' => BitAnd,
-                '%' => Rem,
-                '!' if cursor.shift_if_eq('=') => BangEq,
-                '(' => OpenDelimiter(Delimiter::Paren),
-                '[' => OpenDelimiter(Delimiter::Bracket),
-                '{' => OpenDelimiter(Delimiter::Brace),
-                ')' => CloseDelimiter(Delimiter::Paren),
-                ']' => CloseDelimiter(Delimiter::Bracket),
-                '}' => CloseDelimiter(Delimiter::Brace),
-                '=' if cursor.shift_if_eq('>') => Arrow,
-                '=' if cursor.shift_if_eq('=') => EqEq,
-                '=' if cursor.shift_if_eq('!') => NeEq,
-                '=' => Eq,
-                '+' if cursor.shift_if_eq('+') => PlusPlus,
-                '+' if cursor.shift_if_eq('=') => PlusEq,
-                '+' => Plus,
-                '-' if cursor.shift_if_eq('>') => Arrow,
-                '-' => Minus,
-                '>' if cursor.shift_if_eq('=') => GreaterThan,
-                '/' if cursor.shift_if_eq('/') => {
-                    cursor.shift_while(|ch| !classes::is_newline(ch));
-                    Comment
+            let token = if let Some(token) = config.delimiters.get(&first_char) {
+                *token
+            } else {
+                match first_char {
+                    ':' => Colon,
+                    '&' if cursor.shift_if('&') => And,
+                    '&' => BitAnd,
+                    '%' => Rem,
+                    '!' if cursor.shift_if('=') => BangEq,
+                    '=' if cursor.shift_if('>') => Arrow,
+                    '=' if cursor.shift_if('=') => EqEq,
+                    '=' if cursor.shift_if('!') => NeEq,
+                    '=' => Eq,
+                    '+' if cursor.shift_if('+') => PlusPlus,
+                    '+' if cursor.shift_if('=') => PlusEq,
+                    '+' => Plus,
+                    '-' if cursor.shift_if('>') => Arrow,
+                    '-' => Minus,
+                    '>' if cursor.shift_if('=') => GreaterThan,
+                    '/' if cursor.shift_if('/') => {
+                        cursor.shift_while(|ch| !classes::is_newline(ch));
+                        Comment
+                    }
+                    '/' => Slash,
+                    '*' => Star,
+                    '"' => {
+                        scan_string(first_char, &mut cursor);
+                        String
+                    }
+                    '\'' => scan_lifetime_or_char(&mut cursor),
+                    _ if classes::is_newline(first_char) => {
+                        cursor.shift_while(classes::is_newline);
+                        Newline
+                    }
+                    _ if classes::is_whitespace(first_char) => {
+                        cursor.shift_while(classes::is_whitespace);
+                        Whitespace
+                    }
+                    'r' => {
+                        scan_raw_string(&mut cursor);
+                        RawString
+                    }
+                    _ => Unknown,
                 }
-                '/' => Slash,
-                '*' => Star,
-                '"' => {
-                    scan_string(first_char, &mut cursor);
-                    String
-                }
-                '\'' => scan_lifetime_or_char(&mut cursor),
-                _ if classes::is_newline(first_char) => {
-                    cursor.shift_while(classes::is_newline);
-                    Newline
-                }
-                _ if classes::is_whitespace(first_char) => {
-                    cursor.shift_while(classes::is_whitespace);
-                    Whitespace
-                }
-                _ => Unknown,
             };
 
             let len = cursor.reset_len();
@@ -245,10 +274,10 @@ impl<'me> InputBuilder<'me> {
 }
 
 fn scan_lifetime_or_char(cursor: &mut Cursor) -> Token {
-    if cursor.shift_cls(classes::is_xid_start) {
+    if cursor.shift_if(classes::is_xid_start) {
         cursor.shift_while(classes::is_xid_continue);
 
-        if cursor.shift_if_eq('\'') {
+        if cursor.shift_if('\'') {
             Token::Char
         } else {
             Token::Lifetime
@@ -265,9 +294,7 @@ fn scan_string(c: char, cursor: &mut Cursor) {
         match c {
             '\\' => {
                 cursor.shift();
-                if cursor.matches('\\') || cursor.matches(quote_type) {
-                    cursor.shift();
-                }
+                cursor.shift_if(|ch| ch == '\\' || ch == quote_type);
             }
             c if c == quote_type => {
                 cursor.shift();
@@ -280,22 +307,44 @@ fn scan_string(c: char, cursor: &mut Cursor) {
     }
 }
 
-fn scan_char(ptr: &mut Cursor) {
-    while let Some(c) = ptr.peek() {
+fn scan_char(cursor: &mut Cursor) {
+    while let Some(c) = cursor.peek() {
         match c {
             '\\' => {
-                ptr.shift();
-                if ptr.matches('\\') || ptr.matches('\'') {
-                    ptr.shift();
-                }
+                cursor.shift();
+                cursor.shift_if(|ch| ch == '\\' || ch == '\'');
             }
             '\'' => {
-                ptr.shift();
+                cursor.shift();
                 return;
             }
             '\n' => return,
             _ => {
-                ptr.shift();
+                cursor.shift();
+            }
+        }
+    }
+}
+
+fn scan_raw_string(cursor: &mut Cursor) {
+    let mut hashes = 0;
+    while cursor.shift_if('#') {
+        hashes += 1;
+    }
+
+    if !cursor.shift_if('"') {
+        return;
+    }
+
+    while let Some(c) = cursor.shift() {
+        if c == '"' {
+            let mut hashes_left = hashes;
+            while cursor.peek() == '#'.into() && hashes_left > 0 {
+                hashes_left -= 1;
+                cursor.shift();
+            }
+            if hashes_left == 0 {
+                return;
             }
         }
     }
