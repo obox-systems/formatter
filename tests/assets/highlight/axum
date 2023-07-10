@@ -1,0 +1,22 @@
+use axum::{handler::get, Router};
+use std::net::SocketAddr;
+
+async fn hello_world() -> &'static str {
+    "Hello, World!"
+}
+
+#[tokio::main]
+async fn main() {
+    // Create a new Axum router
+    let app = Router::new()
+        .route("/", get(hello_world));
+
+    // Set the server address
+    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+
+    // Start the server
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await
+        .unwrap();
+}
