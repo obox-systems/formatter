@@ -162,6 +162,7 @@ mod tests {
 
     fn read_or_create(path: PathBuf, fallback: &str) -> String {
         let fallback = || {
+            println!("\x1b[1m\x1b[92mupdating\x1b[0m: {}", path.display());
             std::fs::write(&path, fallback).unwrap();
             fallback.to_owned()
         };
