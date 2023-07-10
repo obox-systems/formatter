@@ -51,8 +51,10 @@ impl Emitter {
                 }
             }
             Token::OpenDelimiter(Delimiter::Brace) if input.prev() == Token::Colon => {}
-            Token::OpenDelimiter(Delimiter::Brace) if !matches!(input.prev(), Token::Newline) => {
-                //    self.newline()
+            Token::OpenDelimiter(Delimiter::Brace)
+                if !matches!(dbg!(input.prev()), Token::Newline | Token::Empty) =>
+            {
+                self.newline()
             }
             _ if current.maybe_binary_operator() && input.prev() != Token::Whitespace => {
                 self.whitespace()
@@ -207,5 +209,10 @@ mod tests {
 
             assert_eq!(input, expected);
         });
+    }
+
+    #[test]
+    fn pg() {
+        println!("{:?}", format("{}"));
     }
 }

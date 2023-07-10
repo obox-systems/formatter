@@ -70,6 +70,9 @@ pub(crate) enum Token {
 
     Char,
 
+    /// kwk
+    Empty,
+
     /// End of file.
     Eof,
 }
@@ -222,7 +225,10 @@ impl<'me> Input<'me> {
     }
 
     pub(crate) fn prev(&self) -> Token {
-        self.tokens[self.pos.get().saturating_sub(2)]
+        match self.pos.get().checked_sub(2) {
+            Some(pos) => self.tokens[pos],
+            None => Token::Empty,
+        }
     }
 
     /// Returns the span of the current position in the source.
