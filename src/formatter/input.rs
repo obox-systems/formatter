@@ -17,6 +17,8 @@ pub(crate) enum Token {
     String,
     /// ` `
     Whitespace,
+    /// `r#""#`
+    RawString,
     /// `\n`, `\r`
     Newline,
     /// Unknown symbol
@@ -93,6 +95,7 @@ impl Token {
             Self::OpenDelimiter(_) => Color::BrightBlack,
             Self::CloseDelimiter(_) => Color::BrightBlack,
             Self::String => Color::BrightMagenta,
+            Self::RawString => Color::Magenta,
             Self::Whitespace => Color::White,
             Self::Newline => Color::BrightRed,
             Self::Unknown => Color::Black,
@@ -178,6 +181,10 @@ impl<'me> Input<'me> {
                     _ if classes::is_whitespace(first_char) => {
                         cursor.shift_while(classes::is_whitespace);
                         Whitespace
+                    }
+                    'r' => {
+                        scan_raw_string(&mut cursor);
+                        RawString
                     }
                     _ => Unknown,
                 }
@@ -314,6 +321,30 @@ fn scan_char(cursor: &mut Cursor) {
             '\n' => return,
             _ => {
                 cursor.shift();
+            }
+        }
+    }
+}
+
+fn scan_raw_string(cursor: &mut Cursor) {
+    let mut hashes = 0;
+    while cursor.shift_if('#') {
+        hashes += 1;
+    }
+
+    if !cursor.shift_if('"') {
+        return;
+    }
+
+    while let Some(c) = cursor.shift() {
+        if c == '"' {
+            let mut hashes_left = hashes;
+            while cursor.peek() == '#'.into() && hashes_left > 0 {
+                hashes_left -= 1;
+                cursor.shift();
+            }
+            if hashes_left == 0 {
+                return;
             }
         }
     }
