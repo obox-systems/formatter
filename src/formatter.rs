@@ -122,7 +122,8 @@ pub(crate) fn format(source: &str) -> String {
 mod tests {
     use std::path::PathBuf;
 
-    use super::format;
+    use super::{format, input::Input};
+    use itertools::Itertools;
     use pretty_assertions::assert_eq;
 
     fn update_expect() -> bool {
@@ -208,6 +209,22 @@ mod tests {
             let input = crate::highlight::highlight(&std::fs::read_to_string(input).unwrap());
             let expected = read_or_create(expected, &input);
 
+            assert_eq!(input, expected);
+        });
+    }
+
+    #[test]
+    fn lex() {
+        traverse("tests/assets/lex", |input, expected| {
+            let input = std::fs::read_to_string(input).unwrap();
+            let input = Input::of(&input);
+
+            let input = input
+                .iter()
+                .map(|token| format!("{token:?} at {:?}", input.span()))
+                .join("\n");
+
+            let expected = read_or_create(expected, &input);
             assert_eq!(input, expected);
         });
     }

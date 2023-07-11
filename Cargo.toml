@@ -12,6 +12,7 @@ unicode-ident = "1.0"
 toml = "0.7"
 serde = { version = "1", features = ["derive"] }
 colored = "2.0"
+unicode-xid = "0.2.4"
 
 [dev-dependencies]
 pretty_assertions = "1.2"

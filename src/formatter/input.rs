@@ -73,6 +73,9 @@ pub(crate) enum Token {
     /// kwk
     Empty,
 
+    /// Ident
+    Ident,
+
     /// End of file.
     Eof,
 }
@@ -188,6 +191,10 @@ impl<'me> Input<'me> {
                     'r' => {
                         scan_raw_string(&mut cursor);
                         RawString
+                    }
+                    _ if classes::is_id_start(first_char) => {
+                        cursor.shift_while(classes::is_id_continue);
+                        Ident
                     }
                     _ => Unknown,
                 }
