@@ -224,7 +224,7 @@ mod tests {
 
             let input = input
                 .iter()
-                .map(|token| format!("{token:?} at {:?}", input.span(None)))
+                .map(|token| format!("{token:?} [`{}`] at {:?}", input.slice(), input.span(None)))
                 .join("\n");
 
             let expected = read_or_create(expected, &input);
