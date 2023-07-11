@@ -36,6 +36,8 @@ pub(crate) enum Token {
     PlusPlus,
     /// '+='
     PlusEq,
+    /// `-=`
+    MinusEq,
     /// `!=`
     NeEq,
     /// `-`
@@ -166,6 +168,7 @@ impl<'me> Input<'me> {
                     '+' if cursor.shift_if('+') => PlusPlus,
                     '+' if cursor.shift_if('=') => PlusEq,
                     '+' => Plus,
+                    '-' if cursor.shift_if('=') => MinusEq,
                     '-' if cursor.shift_if('>') => Arrow,
                     '-' => Minus,
                     '>' if cursor.shift_if('=') => GreaterThan,
