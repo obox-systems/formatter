@@ -1,0 +1,29 @@
+[42mfn[0m[47m [0m[42mmain[0m[100m([0m[100m)[0m[47m [0m[100m{[0m[101m
+[0m[47m    [0m[42mlet[0m[47m [0m[42mnum1[0m[42m:[0m[47m [0m[42mu32[0m[47m [0m[42m=[0m[47m [0m[40m4[0m[40m2[0m[40m;[0m[101m
+[0m[47m    [0m[42mlet[0m[47m [0m[42mnum2[0m[42m:[0m[47m [0m[42mu32[0m[47m [0m[42m=[0m[47m [0m[40m2[0m[40m3[0m[40m;[0m[101m
+
+[0m[47m    [0m[42mlet[0m[47m [0m[42mand_result[0m[47m [0m[42m=[0m[47m [0m[42mnum1[0m[47m [0m[42m&[0m[47m [0m[42mnum2[0m[40m;[0m[101m
+[0m[47m    [0m[42mprintln[0m[40m![0m[100m([0m[105m"Bitwise AND: {}"[0m[40m,[0m[47m [0m[42mand_result[0m[100m)[0m[40m;[0m[101m
+
+[0m[47m    [0m[42mlet[0m[47m [0m[42mor_result[0m[47m [0m[42m=[0m[47m [0m[42mnum1[0m[47m [0m[40m|[0m[47m [0m[42mnum2[0m[40m;[0m[101m
+[0m[47m    [0m[42mprintln[0m[40m![0m[100m([0m[105m"Bitwise OR: {}"[0m[40m,[0m[47m [0m[42mor_result[0m[100m)[0m[40m;[0m[101m
+
+[0m[47m    [0m[42mlet[0m[47m [0m[42mxor_result[0m[47m [0m[42m=[0m[47m [0m[42mnum1[0m[47m [0m[40m^[0m[47m [0m[42mnum2[0m[40m;[0m[101m
+[0m[47m    [0m[42mprintln[0m[40m![0m[100m([0m[105m"Bitwise XOR: {}"[0m[40m,[0m[47m [0m[42mxor_result[0m[100m)[0m[40m;[0m[101m
+
+[0m[47m    [0m[42mlet[0m[47m [0m[42mshift_left_result[0m[47m [0m[42m=[0m[47m [0m[42mnum1[0m[47m [0m[42m<[0m[42m<[0m[47m [0m[40m2[0m[40m;[0m[101m
+[0m[47m    [0m[42mprintln[0m[40m![0m[100m([0m[105m"Shift Left: {}"[0m[40m,[0m[47m [0m[42mshift_left_result[0m[100m)[0m[40m;[0m[101m
+
+[0m[47m    [0m[42mlet[0m[47m [0m[42mshift_right_result[0m[47m [0m[42m=[0m[47m [0m[42mnum2[0m[47m [0m[40m>[0m[40m>[0m[47m [0m[40m1[0m[40m;[0m[101m
+[0m[47m    [0m[42mprintln[0m[40m![0m[100m([0m[105m"Shift Right: {}"[0m[40m,[0m[47m [0m[42mshift_right_result[0m[100m)[0m[40m;[0m[101m
+
+[0m[47m    [0m[42mlet[0m[47m [0m[42mcomplement_result[0m[47m [0m[42m=[0m[47m [0m[40m![0m[42mnum1[0m[40m;[0m[101m
+[0m[47m    [0m[42mprintln[0m[40m![0m[100m([0m[105m"Bitwise NOT: {}"[0m[40m,[0m[47m [0m[42mcomplement_result[0m[100m)[0m[40m;[0m[101m
+
+[0m[47m    [0m[42mlet[0m[47m [0m[42mleading_zeros[0m[47m [0m[42m=[0m[47m [0m[42mnum1[0m[40m.[0m[42mleading_zeros[0m[100m([0m[100m)[0m[40m;[0m[101m
+[0m[47m    [0m[42mprintln[0m[40m![0m[100m([0m[105m"Leading Zeros: {}"[0m[40m,[0m[47m [0m[42mleading_zeros[0m[100m)[0m[40m;[0m[101m
+
+[0m[47m    [0m[42mlet[0m[47m [0m[42mtrailing_zeros[0m[47m [0m[42m=[0m[47m [0m[42mnum2[0m[40m.[0m[42mtrailing_zeros[0m[100m([0m[100m)[0m[40m;[0m[101m
+[0m[47m    [0m[42mprintln[0m[40m![0m[100m([0m[105m"Trailing Zeros: {}"[0m[40m,[0m[47m [0m[42mtrailing_zeros[0m[100m)[0m[40m;[0m[101m
+[0m[100m}[0m[101m
+[0m

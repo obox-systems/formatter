@@ -4,7 +4,7 @@ use std::process::Command;
 use miette::{IntoDiagnostic as _, WrapErr as _};
 use wca::{Args, Context, Props};
 
-use crate::{parse_args, Result};
+use crate::Result;
 
 pub(crate) fn format(cx: Context, _args: Args, _props: Props) -> Result {
     let source = cx.get_ref::<PathBuf>();
@@ -48,7 +48,7 @@ pub(crate) fn format(cx: Context, _args: Args, _props: Props) -> Result {
 
 pub(crate) fn with(cx: Context, args: Args, _props: Props) -> Result {
     let mut args = args.0.into_iter();
-    parse_args!(args, path: PathBuf);
+    wca::parse_args!(args, path: PathBuf);
 
     cx.insert(path);
 

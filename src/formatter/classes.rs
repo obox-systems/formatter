@@ -31,3 +31,18 @@ pub(crate) fn is_newline(c: char) -> bool {
         | '\u{0085}'
     )
 }
+
+/// True if `c` is valid as a non-first character of an identifier.
+/// See [Rust language reference](https://doc.rust-lang.org/reference/identifiers.html) for
+/// a formal definition of valid identifier name.
+pub(crate) fn is_id_start(c: char) -> bool {
+    c == '_' || unicode_xid::UnicodeXID::is_xid_start(c)
+}
+
+/// True if `c` is valid as a non-first character of an identifier.
+/// See [Rust language reference](https://doc.rust-lang.org/reference/identifiers.html) for
+/// a formal definition of valid identifier name.
+/// The passed string is lexically an identifier.
+pub(crate) fn is_id_continue(c: char) -> bool {
+    unicode_xid::UnicodeXID::is_xid_continue(c)
+}

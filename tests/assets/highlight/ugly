@@ -1,0 +1,6 @@
+fn main(){
+let             mut  number              = 10     ;
+let     mut  sum       = 0           ;
+for i in 0.. number {
+if           i % 2      ==         0{sum+=i;}}
+println!("The     sum        of       even numbers   up   to    {}  is:   {}   "    ,number, sum);          }

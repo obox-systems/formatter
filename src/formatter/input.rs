@@ -36,6 +36,8 @@ pub(crate) enum Token {
     PlusPlus,
     /// '+='
     PlusEq,
+    /// `-=`
+    MinusEq,
     /// `!=`
     NeEq,
     /// `-`
@@ -69,6 +71,15 @@ pub(crate) enum Token {
     Rem,
 
     Char,
+
+    /// `<`
+    Lt,
+
+    /// kwk
+    Empty,
+
+    /// Ident
+    Ident,
 
     /// End of file.
     Eof,
@@ -148,6 +159,7 @@ impl<'me> Input<'me> {
                 *token
             } else {
                 match first_char {
+                    '<' => Lt,
                     ':' => Colon,
                     '&' if cursor.shift_if('&') => And,
                     '&' => BitAnd,
@@ -160,6 +172,7 @@ impl<'me> Input<'me> {
                     '+' if cursor.shift_if('+') => PlusPlus,
                     '+' if cursor.shift_if('=') => PlusEq,
                     '+' => Plus,
+                    '-' if cursor.shift_if('=') => MinusEq,
                     '-' if cursor.shift_if('>') => Arrow,
                     '-' => Minus,
                     '>' if cursor.shift_if('=') => GreaterThan,
@@ -185,6 +198,10 @@ impl<'me> Input<'me> {
                     'r' => {
                         scan_raw_string(&mut cursor);
                         RawString
+                    }
+                    _ if classes::is_id_start(first_char) => {
+                        cursor.shift_while(classes::is_id_continue);
+                        Ident
                     }
                     _ => Unknown,
                 }
@@ -222,14 +239,19 @@ impl<'me> Input<'me> {
     }
 
     pub(crate) fn prev(&self) -> Token {
-        self.tokens[self.pos.get().saturating_sub(2)]
+        match self.pos.get().checked_sub(2) {
+            Some(pos) => self.tokens[pos],
+            None => Token::Empty,
+        }
     }
 
     /// Returns the span of the current position in the source.
     /// The span is determined by the start offsets stored in `self.start_offsets`.
-    pub(crate) fn span(&self) -> (u32, u32) {
-        let hi = self.start_offsets[self.pos.get()];
-        let lo = self.start_offsets[self.pos.get() - 1];
+    pub(crate) fn span(&self, pos: impl Into<Option<usize>>) -> (u32, u32) {
+        let pos = pos.into().unwrap_or(self.pos.get());
+
+        let hi = self.start_offsets[pos];
+        let lo = self.start_offsets[pos - 1];
 
         (lo, hi)
     }
@@ -237,7 +259,13 @@ impl<'me> Input<'me> {
     /// Returns a slice of the source string corresponding to the span.
     /// The span is determined by the `lo` and `hi` values obtained from `self.span()`.
     pub(crate) fn slice(&self) -> &str {
-        let (lo, hi) = self.span();
+        let (lo, hi) = self.span(None);
+
+        &self.source[lo as usize..hi as usize]
+    }
+
+    pub(crate) fn prev_slice(&self) -> &str {
+        let (lo, hi) = self.span(self.pos.get().saturating_sub(1));
 
         &self.source[lo as usize..hi as usize]
     }
@@ -362,7 +390,7 @@ mod tests {
         let input = Input::of(source);
         let actual = input
             .iter()
-            .map(|token| format!("{token:?} at {:?}", input.span()))
+            .map(|token| format!("{token:?} at {:?}", input.span(None)))
             .join("\n");
         expect.assert_eq(&actual);
     }
@@ -395,11 +423,11 @@ mod tests {
                 Whitespace at (17, 18)
                 BangEq at (18, 20)
                 Whitespace at (20, 21)
-                Unknown at (21, 22)
+                Lt at (21, 22)
                 Whitespace at (22, 23)
                 Unknown at (23, 24)
                 Whitespace at (24, 25)
-                Unknown at (25, 26)
+                Lt at (25, 26)
                 Eq at (26, 27)
                 Whitespace at (27, 28)
                 GreaterThan at (28, 30)
@@ -417,8 +445,8 @@ mod tests {
                 Whitespace at (42, 43)
                 Unknown at (43, 44)
                 Whitespace at (44, 45)
-                Unknown at (45, 46)
-                Unknown at (46, 47)
+                Lt at (45, 46)
+                Lt at (46, 47)
                 Whitespace at (47, 48)
                 Unknown at (48, 49)
                 Unknown at (49, 50)"#]],

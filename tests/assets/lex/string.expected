@@ -1,0 +1,6 @@
+String ["\"{[()]}\""] at (0, 8)
+Newline ["\n\n"] at (8, 10)
+RawString ["r#\" \"\" \"#"] at (10, 19)
+Newline ["\n\n"] at (19, 21)
+RawString ["r##\" r#\"\"# \"##"] at (21, 35)
+Newline ["\n"] at (35, 36)

@@ -11,6 +11,7 @@ struct Emitter {
 }
 
 impl Emitter {
+    #[allow(dead_code)]
     fn newline(&mut self) {
         self.output.push('\n');
     }
@@ -23,8 +24,10 @@ impl Emitter {
         self.output.push(' ');
     }
 
-    fn indent(&mut self) {
-        let s = " ".repeat(self.lvl);
+    fn indent(&mut self, lvl: Option<usize>) {
+        let lvl = lvl.unwrap_or(self.lvl);
+        let s = "  ".repeat(lvl);
+
         self.output.push_str(&s);
     }
 
@@ -48,10 +51,23 @@ impl Emitter {
                 }
             }
             Token::OpenDelimiter(Delimiter::Brace) if input.prev() == Token::Colon => {}
-            Token::OpenDelimiter(Delimiter::Brace) if input.prev() != Token::Newline => {
-                self.newline()
+            Token::OpenDelimiter(Delimiter::Brace)
+                if !matches!(
+                    input.prev(),
+                    Token::Newline
+                        | Token::Whitespace
+                        | Token::Empty
+                        | Token::OpenDelimiter(..)
+                        | Token::Lt
+                ) =>
+            {
+                self.newline();
+                //self.indent(None);
             }
-            _ if current.maybe_binary_operator() && input.prev() != Token::Whitespace => {
+            _ if current.maybe_binary_operator()
+                && input.prev() != Token::Whitespace
+                && input.prev_slice() != "dyn" =>
+            {
                 self.whitespace()
             }
             _ => {}
@@ -78,12 +94,9 @@ impl Emitter {
     }
 }
 
-#[allow(clippy::field_reassign_with_default)]
 pub(crate) fn format(source: &str) -> String {
-    let input = Input::of(source);
-
     let mut emitter = Emitter::default();
-    emitter.lvl = 1;
+    let input = Input::of(source);
 
     for token in input.iter() {
         match token {
@@ -92,17 +105,23 @@ pub(crate) fn format(source: &str) -> String {
             _ => {}
         };
 
-        emitter.before(token, &input);
-
-        if token == Token::Newline && input.peek() == Token::Whitespace {
-            emitter.newline();
-            emitter.indent();
-            input.next();
-            continue;
+        match token {
+            Token::Newline => {}
+            Token::Whitespace
+                if matches!(input.peek(), Token::CloseDelimiter(Delimiter::Brace)) =>
+            {
+                emitter.indent(Some(emitter.lvl - 1));
+                continue;
+            }
+            Token::Whitespace if input.prev() == Token::Newline => {
+                emitter.indent(None);
+                continue;
+            }
+            _ => {}
         }
 
-        let raw = input.slice();
-        emitter.raw(raw);
+        emitter.before(token, &input);
+        emitter.raw(input.slice());
         emitter.after(token, &input);
     }
 
@@ -113,7 +132,8 @@ pub(crate) fn format(source: &str) -> String {
 mod tests {
     use std::path::PathBuf;
 
-    use super::format;
+    use super::{format, input::Input};
+    use itertools::Itertools;
     use pretty_assertions::assert_eq;
 
     fn update_expect() -> bool {
@@ -201,5 +221,26 @@ mod tests {
 
             assert_eq!(input, expected);
         });
+    }
+
+    #[test]
+    fn lex() {
+        traverse("tests/assets/lex", |input, expected| {
+            let input = std::fs::read_to_string(input).unwrap();
+            let input = Input::of(&input);
+
+            let input = input
+                .iter()
+                .map(|token| format!("{token:?} [{:?}] at {:?}", input.slice(), input.span(None)))
+                .join("\n");
+
+            let expected = read_or_create(expected, &input);
+            assert_eq!(input, expected);
+        });
+    }
+
+    #[test]
+    fn pg() {
+        println!("{}", format("dyn* Trait"));
     }
 }
