@@ -72,6 +72,9 @@ pub(crate) enum Token {
 
     Char,
 
+    /// `<`
+    Lt,
+
     /// kwk
     Empty,
 
@@ -156,6 +159,7 @@ impl<'me> Input<'me> {
                 *token
             } else {
                 match first_char {
+                    '<' => Lt,
                     ':' => Colon,
                     '&' if cursor.shift_if('&') => And,
                     '&' => BitAnd,
@@ -419,11 +423,11 @@ mod tests {
                 Whitespace at (17, 18)
                 BangEq at (18, 20)
                 Whitespace at (20, 21)
-                Unknown at (21, 22)
+                Lt at (21, 22)
                 Whitespace at (22, 23)
                 Unknown at (23, 24)
                 Whitespace at (24, 25)
-                Unknown at (25, 26)
+                Lt at (25, 26)
                 Eq at (26, 27)
                 Whitespace at (27, 28)
                 GreaterThan at (28, 30)
@@ -441,8 +445,8 @@ mod tests {
                 Whitespace at (42, 43)
                 Unknown at (43, 44)
                 Whitespace at (44, 45)
-                Unknown at (45, 46)
-                Unknown at (46, 47)
+                Lt at (45, 46)
+                Lt at (46, 47)
                 Whitespace at (47, 48)
                 Unknown at (48, 49)
                 Unknown at (49, 50)"#]],

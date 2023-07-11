@@ -11,7 +11,7 @@
 [0m[47m    [0m[42mlet[0m[47m [0m[42mxor_result[0m[47m [0m[42m=[0m[47m [0m[42mnum1[0m[47m [0m[40m^[0m[47m [0m[42mnum2[0m[40m;[0m[101m
 [0m[47m    [0m[42mprintln[0m[40m![0m[100m([0m[105m"Bitwise XOR: {}"[0m[40m,[0m[47m [0m[42mxor_result[0m[100m)[0m[40m;[0m[101m
 
-[0m[47m    [0m[42mlet[0m[47m [0m[42mshift_left_result[0m[47m [0m[42m=[0m[47m [0m[42mnum1[0m[47m [0m[40m<[0m[40m<[0m[47m [0m[40m2[0m[40m;[0m[101m
+[0m[47m    [0m[42mlet[0m[47m [0m[42mshift_left_result[0m[47m [0m[42m=[0m[47m [0m[42mnum1[0m[47m [0m[42m<[0m[42m<[0m[47m [0m[40m2[0m[40m;[0m[101m
 [0m[47m    [0m[42mprintln[0m[40m![0m[100m([0m[105m"Shift Left: {}"[0m[40m,[0m[47m [0m[42mshift_left_result[0m[100m)[0m[40m;[0m[101m
 
 [0m[47m    [0m[42mlet[0m[47m [0m[42mshift_right_result[0m[47m [0m[42m=[0m[47m [0m[42mnum2[0m[47m [0m[40m>[0m[40m>[0m[47m [0m[40m1[0m[40m;[0m[101m

@@ -52,9 +52,16 @@ impl Emitter {
             }
             Token::OpenDelimiter(Delimiter::Brace) if input.prev() == Token::Colon => {}
             Token::OpenDelimiter(Delimiter::Brace)
-                if !matches!(input.prev(), Token::Newline | Token::Empty) =>
+                if !matches!(
+                    input.prev(),
+                    Token::Newline
+                        | Token::Whitespace
+                        | Token::Empty
+                        | Token::OpenDelimiter(..)
+                        | Token::Lt
+                ) =>
             {
-                // self.newline();
+                self.newline();
                 //self.indent(None);
             }
             _ if current.maybe_binary_operator()
