@@ -240,9 +240,11 @@ impl<'me> Input<'me> {
 
     /// Returns the span of the current position in the source.
     /// The span is determined by the start offsets stored in `self.start_offsets`.
-    pub(crate) fn span(&self) -> (u32, u32) {
-        let hi = self.start_offsets[self.pos.get()];
-        let lo = self.start_offsets[self.pos.get() - 1];
+    pub(crate) fn span(&self, pos: impl Into<Option<usize>>) -> (u32, u32) {
+        let pos = pos.into().unwrap_or(self.pos.get());
+
+        let hi = self.start_offsets[pos];
+        let lo = self.start_offsets[pos - 1];
 
         (lo, hi)
     }
@@ -250,7 +252,13 @@ impl<'me> Input<'me> {
     /// Returns a slice of the source string corresponding to the span.
     /// The span is determined by the `lo` and `hi` values obtained from `self.span()`.
     pub(crate) fn slice(&self) -> &str {
-        let (lo, hi) = self.span();
+        let (lo, hi) = self.span(None);
+
+        &self.source[lo as usize..hi as usize]
+    }
+
+    pub(crate) fn prev_slice(&self) -> &str {
+        let (lo, hi) = self.span(self.pos.get().saturating_sub(1));
 
         &self.source[lo as usize..hi as usize]
     }
@@ -375,7 +383,7 @@ mod tests {
         let input = Input::of(source);
         let actual = input
             .iter()
-            .map(|token| format!("{token:?} at {:?}", input.span()))
+            .map(|token| format!("{token:?} at {:?}", input.span(None)))
             .join("\n");
         expect.assert_eq(&actual);
     }

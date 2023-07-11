@@ -57,7 +57,10 @@ impl Emitter {
                 // self.newline();
                 //self.indent(None);
             }
-            _ if current.maybe_binary_operator() && input.prev() != Token::Whitespace => {
+            _ if current.maybe_binary_operator()
+                && input.prev() != Token::Whitespace
+                && input.prev_slice() != "dyn" =>
+            {
                 self.whitespace()
             }
             _ => {}
@@ -221,7 +224,7 @@ mod tests {
 
             let input = input
                 .iter()
-                .map(|token| format!("{token:?} at {:?}", input.span()))
+                .map(|token| format!("{token:?} at {:?}", input.span(None)))
                 .join("\n");
 
             let expected = read_or_create(expected, &input);
@@ -231,6 +234,6 @@ mod tests {
 
     #[test]
     fn pg() {
-        println!("{}", format("fn name() {}"));
+        println!("{}", format("dyn* Trait"));
     }
 }
