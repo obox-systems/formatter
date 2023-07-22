@@ -71,37 +71,37 @@ struct Lexed<'input> {
 impl<'input> Lexed<'input> {
     fn reader(self) -> LexerReader<'input> {
         LexerReader {
-            pos: 0,
-            offset: 0,
-            last_offset: 0,
+            position: 0,
+            end: 0,
+            start: 0,
             lexed: self,
         }
     }
 }
 
 struct LexerReader<'input> {
-    pos: usize,
-    last_offset: usize,
-    offset: usize,
+    position: usize,
+    start: usize,
+    end: usize,
     lexed: Lexed<'input>,
 }
 
 impl<'input> LexerReader<'input> {
     fn next(&mut self) -> Option<&Token> {
-        let token = self.lexed.tokens.get(self.pos);
+        let token = self.lexed.tokens.get(self.position);
 
         if let Some(token) = token {
-            self.pos += 1;
+            self.position += 1;
 
-            self.last_offset = self.offset;
-            self.offset += token.len;
+            self.start = self.end;
+            self.end += token.len;
         }
 
         token
     }
 
     fn slice(&self) -> &str {
-        &self.lexed.input[self.last_offset..self.offset]
+        &self.lexed.input[self.start..self.end]
     }
 }
 
@@ -114,11 +114,22 @@ fn main() {
     let profile: Profile = toml::from_str(&profile).unwrap();
 
     let state = World::new(profile);
-    let mut reader = state.tokenize(r##"42 ident "string""##).reader();
+    let mut reader = state
+        .tokenize(
+            r##"
+    
+     "hel
+     lo" 
+     
+    "##,
+        )
+        .reader();
 
     while let Some(token) = reader.next() {
         let color = state.color(token.kind);
-        let slice = urlencoding::encode(reader.slice());
+
+        let slice = format!("{:?}", reader.slice());
+        let slice = urlencoding::encode(&slice);
 
         writeln!(
             output,
