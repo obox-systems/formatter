@@ -1,9 +1,4 @@
 [[rules]]
-name = "integer"
-color = "red"
-regex = '\d+'
-
-[[rules]]
 name = "whitespace"
 color = "aqua"
 regex = '[ \t\n\f]+'
@@ -12,3 +7,13 @@ regex = '[ \t\n\f]+'
 name = "string"
 color = "yellow"
 regex = '"([^"\\]|\\.)*"'
+
+[[rules]]
+name = "block_comment"
+color = "yellow"
+regex = '/\*[\s\S]*?\*/'
+
+[[rules]]
+name = "line_comment"
+color = "yellow"
+regex = '\s*//.*'
