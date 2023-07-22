@@ -1,14 +1,14 @@
 [[rules]]
 name = "integer"
 color = "red"
-regex = '''\d+'''
+regex = '\d+'
 
 [[rules]]
 name = "whitespace"
 color = "aqua"
-regex = '''[ \t\n\f]+'''
+regex = '[ \t\n\f]+'
 
 [[rules]]
 name = "string"
 color = "yellow"
-regex = '''"([^"\\]|\\.)*"'''
+regex = '"([^"\\]|\\.)*"'
