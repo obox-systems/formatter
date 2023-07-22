@@ -1,3 +1,0 @@
-b = maybe!  // 50% true
-b = maybe & true!  // 66.666..% true
-b = maybe & true & true!  // 75% true

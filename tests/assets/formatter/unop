@@ -1,8 +1,0 @@
-fn main() {
-    -true;
-    !x;
-    &x;
-    &mut y;
-    !*m;
-    !*n;
-}
