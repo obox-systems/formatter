@@ -7,3 +7,4 @@ edition = "2021"
 m_lexer = "0.0.4"
 serde = { version = "1.0.174", features = ["derive"] }
 toml = "0.7.6"
+urlencoding = "2.1.3"

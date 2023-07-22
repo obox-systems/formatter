@@ -39,6 +39,9 @@ impl World {
             builder = builder.token(TokenKind(raw_kind), &rule.regex);
         }
 
+        names.insert(error_token, "Error".to_owned());
+        colors.insert(error_token, "black".to_owned());
+
         let lexer = builder.error_token(TokenKind(error_token)).build();
 
         Self {
@@ -111,16 +114,11 @@ fn main() {
     let profile: Profile = toml::from_str(&profile).unwrap();
 
     let state = World::new(profile);
-    let mut reader = state.tokenize(" 23 23 2").reader();
+    let mut reader = state.tokenize(r##"42 ident "string""##).reader();
 
     while let Some(token) = reader.next() {
         let color = state.color(token.kind);
-        let slice = reader.slice();
-        let slice = if slice.chars().all(|ch| ch.is_whitespace()) {
-            "%20"
-        } else {
-            slice
-        };
+        let slice = urlencoding::encode(reader.slice());
 
         writeln!(
             output,
