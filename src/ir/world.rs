@@ -47,8 +47,8 @@ impl World {
         &self.colors[&token.0]
     }
 
-    pub(crate) fn tokenize<'input>(&self, input: &'input str) -> lexed::Lexed<'input> {
-        lexed::Lexed {
+    pub(crate) fn tokenize<'input>(&self, input: &'input str) -> lexed::Tokens<'input> {
+        lexed::Tokens {
             input,
             tokens: self.lexer.tokenize(input),
         }
