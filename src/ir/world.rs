@@ -8,6 +8,7 @@ use std::iter::zip;
 
 #[allow(dead_code)]
 pub(crate) struct World {
+    /// TODO: HashMap -> VecMap
     pub(crate) names: HashMap<u16, String>,
     pub(crate) colors: HashMap<u16, String>,
     pub(crate) lexer: Lexer,
