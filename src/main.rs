@@ -1,3 +1,5 @@
+#![deny(unreachable_pub)]
+
 mod ir;
 
 fn main() {
