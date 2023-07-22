@@ -1,6 +1,17 @@
 use crate::ir;
 use std::fmt::Write;
 
+trait Format {
+    fn format(&self, color: String, slice: &str);
+}
+
+// TODO: impl me
+#[allow(dead_code)]
+enum FormatImpl {
+    Markdown,
+    Ansi,
+}
+
 // only for testing
 #[allow(dead_code)]
 pub(crate) fn highlight(input: &str) -> String {

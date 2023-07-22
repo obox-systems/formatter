@@ -16,4 +16,4 @@ regex = '/\*[\s\S]*?\*/'
 [[rules]]
 name = "line_comment"
 color = "yellow"
-regex = '\s*//.*'
+regex = '//[^\n]*'
