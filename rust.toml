@@ -5,5 +5,10 @@ regex = '''\d+'''
 
 [[rules]]
 name = "whitespace"
-color = "green"
+color = "aqua"
 regex = '''[ \t\n\f]+'''
+
+[[rules]]
+name = "string"
+color = "yellow"
+regex = '''"([^"\\]|\\.)*"'''
