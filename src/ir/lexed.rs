@@ -6,8 +6,8 @@ pub(crate) struct Tokens<'input> {
 }
 
 impl<'input> Tokens<'input> {
-    pub(crate) fn reader(self) -> TokenReader<'input> {
-        TokenReader {
+    pub(crate) fn stream(self) -> TokenStream<'input> {
+        TokenStream {
             position: 0,
             start: 0,
             end: 0,
@@ -16,14 +16,14 @@ impl<'input> Tokens<'input> {
     }
 }
 
-pub(crate) struct TokenReader<'input> {
+pub(crate) struct TokenStream<'input> {
     pub(crate) position: usize,
     pub(crate) start: usize,
     pub(crate) end: usize,
     pub(crate) lexed: Tokens<'input>,
 }
 
-impl<'input> TokenReader<'input> {
+impl<'input> TokenStream<'input> {
     pub(crate) fn next(&mut self) -> Option<&Token> {
         let token = self.lexed.tokens.get(self.position);
 
@@ -45,6 +45,8 @@ impl<'input> TokenReader<'input> {
 #[cfg(test)]
 mod tests {
     use std::path::PathBuf;
+
+    use crate::highlight::Markdown;
 
     fn update_expect() -> bool {
         std::env::var("UPDATE_EXPECT").is_ok()
@@ -98,7 +100,11 @@ mod tests {
     #[test]
     fn highlight() {
         traverse("tests", "md", |input, expected| {
-            let input = crate::highlight::highlight(&std::fs::read_to_string(input).unwrap());
+            let input = crate::highlight::highlight(
+                &std::fs::read_to_string(input).unwrap(),
+                Markdown.into(),
+            );
+
             let expected = read_or_create(expected, &input);
 
             assert_eq!(input, expected);
