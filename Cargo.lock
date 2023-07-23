@@ -46,8 +46,7 @@ dependencies = [
 [[package]]
 name = "m_lexer"
 version = "0.0.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a7e51ebf91162d585a5bae05e4779efc4a276171cb880d61dd6fab11c98467a7"
+source = "git+https://github.com/matklad/m_lexer.git#650717383fcc9cec70d78922e118e6037febb5df"
 dependencies = [
  "regex",
 ]

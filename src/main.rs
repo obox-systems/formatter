@@ -2,5 +2,6 @@
 
 mod highlight;
 mod ir;
+mod vec_map;
 
 fn main() {}

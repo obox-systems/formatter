@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-m_lexer = "0.0.4"
+m_lexer = { git = "https://github.com/matklad/m_lexer.git" }
 serde = { version = "1.0.174", features = ["derive"] }
 toml = "0.7.6"
 urlencoding = "2.1.3"
