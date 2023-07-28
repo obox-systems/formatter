@@ -3,6 +3,10 @@ name = "formatter"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "formatter"
+path = "src/bin/formatter.rs"
+
 [dependencies]
 enum_dispatch = "0.3.12"
 m_lexer = { path = "libs/m_lexer" }
