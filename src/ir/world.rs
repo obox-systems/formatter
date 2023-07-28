@@ -20,12 +20,12 @@ impl World {
         let mut colors = VecMap::with_capacity(rules);
 
         for rule in profile.tokens {
-            let kind = eq(names.insert(rule.name), colors.insert(rule.color));
+            let kind = ensure_equal(names.insert(rule.name), colors.insert(rule.color));
 
             builder = builder.token(kind, &rule.regex);
         }
 
-        let error_token = eq(
+        let error_token = ensure_equal(
             names.insert("Error".to_owned()),
             colors.insert("black".to_owned()),
         );
@@ -49,7 +49,7 @@ impl World {
     }
 }
 
-fn eq<T: Eq>(a: T, b: T) -> T {
+fn ensure_equal<T: Eq>(a: T, b: T) -> T {
     debug_assert!(a == b);
     a
 }
