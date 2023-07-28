@@ -21,7 +21,7 @@ impl Highlighter for Markdown {
 
 #[allow(dead_code)]
 pub(crate) fn highlight(input: &str, format_impl: HighlighterImpl) -> String {
-    let mut output = String::new();
+    let mut output = String::with_capacity(input.len());
 
     let profile = std::fs::read_to_string("rust.toml").unwrap();
     let profile: ir::Profile = toml::from_str(&profile).unwrap();
