@@ -27,12 +27,12 @@ pub(crate) fn highlight(input: &str, format_impl: HighlighterImpl) -> String {
     let profile: ir::Profile = toml::from_str(&profile).unwrap();
 
     let state = ir::World::new(profile);
-    let mut reader = state.tokenize(input).stream();
+    let mut stream = state.tokenize(input).stream();
 
-    while let Some(token) = reader.next() {
+    while let Some(token) = stream.next() {
         let color = state.color(token.kind);
 
-        let slice = format!("{:?}", reader.slice());
+        let slice = format!("{:?}", stream.slice());
         let slice = urlencoding::encode(&slice);
 
         output.push_str(&format_impl.highlight(color, &slice));
