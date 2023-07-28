@@ -1,8 +1,10 @@
 use serde::{Deserialize, Serialize};
 
+pub(crate) type Tokens = Vec<Token>;
+
 #[derive(Debug, Deserialize, Serialize)]
-pub(crate) struct Profile {
-    pub(crate) tokens: Vec<Token>,
+pub struct Profile {
+    pub(crate) tokens: Tokens,
     pub(crate) rules: Vec<Rule>,
 }
 

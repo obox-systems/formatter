@@ -1,5 +1,7 @@
 #![deny(unreachable_pub)]
 
 mod highlight;
-mod ir;
+pub mod ir;
 mod vec_map;
+
+pub fn format(_input: &str, _lexer: ir::Lexer) {}

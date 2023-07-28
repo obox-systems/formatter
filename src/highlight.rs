@@ -26,11 +26,11 @@ pub(crate) fn highlight(input: &str, format_impl: HighlighterImpl) -> String {
     let profile = std::fs::read_to_string("rust.toml").unwrap();
     let profile: ir::Profile = toml::from_str(&profile).unwrap();
 
-    let state = ir::World::new(profile);
-    let mut stream = state.tokenize(input).stream();
+    let lexer = ir::Lexer::new(profile.tokens);
+    let mut stream = lexer.tokenize(input).stream();
 
     while let Some(token) = stream.next() {
-        let color = state.color(token.kind);
+        let color = lexer.color(token.kind);
 
         let slice = format!("{:?}", stream.slice());
         let slice = urlencoding::encode(&slice);

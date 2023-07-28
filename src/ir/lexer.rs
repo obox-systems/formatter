@@ -1,25 +1,27 @@
+use crate::ir::profile::Tokens;
 use crate::vec_map::VecMap;
 
-use super::{lexed, Profile};
-use m_lexer::{Lexer, LexerBuilder, TokenKind};
+use m_lexer::{Lexer as Lexer0, LexerBuilder, TokenKind};
+
+use super::lexed;
 
 #[allow(dead_code)]
-pub(crate) struct World {
+pub struct Lexer {
     pub(crate) names: VecMap<String>,
     pub(crate) colors: VecMap<String>,
-    pub(crate) lexer: Lexer,
+    pub(crate) lexer: Lexer0,
 }
 
-impl World {
-    pub(crate) fn new(profile: Profile) -> Self {
+impl Lexer {
+    pub(crate) fn new(tokens: Tokens) -> Self {
         let mut builder = LexerBuilder::new();
 
-        let rules = profile.tokens.len() + 1;
+        let rules = tokens.len() + 1;
 
         let mut names = VecMap::with_capacity(rules);
         let mut colors = VecMap::with_capacity(rules);
 
-        for rule in profile.tokens {
+        for rule in tokens {
             let kind = ensure_equal(names.insert(rule.name), colors.insert(rule.color));
 
             builder = builder.token(kind, &rule.regex);
