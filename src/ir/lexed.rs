@@ -11,7 +11,7 @@ impl<'input> Tokens<'input> {
             position: 0,
             start: 0,
             end: 0,
-            lexed: self,
+            tokens: self,
         }
     }
 }
@@ -20,12 +20,12 @@ pub(crate) struct TokenStream<'input> {
     pub(crate) position: usize,
     pub(crate) start: usize,
     pub(crate) end: usize,
-    pub(crate) lexed: Tokens<'input>,
+    pub(crate) tokens: Tokens<'input>,
 }
 
 impl<'input> TokenStream<'input> {
     pub(crate) fn next(&mut self) -> Option<&Token> {
-        let token = self.lexed.tokens.get(self.position);
+        let token = self.tokens.tokens.get(self.position);
 
         if let Some(token) = token {
             self.position += 1;
@@ -38,7 +38,7 @@ impl<'input> TokenStream<'input> {
     }
 
     pub(crate) fn slice(&self) -> &str {
-        &self.lexed.input[self.start..self.end]
+        &self.tokens.input[self.start..self.end]
     }
 }
 
