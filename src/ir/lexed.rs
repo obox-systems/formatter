@@ -1,11 +1,17 @@
 use m_lexer::Token;
 
+// Define a public, crate-visible struct called Tokens.
+// This struct holds references to an input string and a vector of Token objects.
 pub(crate) struct Tokens<'input> {
+    // The input string that the tokens will be extracted from.
     pub(crate) input: &'input str,
+    // The vector that will store the extracted tokens.
     pub(crate) tokens: Vec<Token>,
 }
 
 impl<'input> Tokens<'input> {
+    // Define a public function named `stream` that takes ownership of `self`, which is an instance of the `Tokens` struct.
+    // This function will return a new `TokenStream` object, which will be used to iterate over the tokens extracted from the input string.
     pub(crate) fn stream(self) -> TokenStream<'input> {
         TokenStream {
             position: 0,
@@ -16,10 +22,20 @@ impl<'input> Tokens<'input> {
     }
 }
 
+// Define a public, crate-visible struct named `TokenStream` parameterized by a lifetime `'input`.
+// This struct is used to represent a stream of tokens extracted from an input string.
 pub(crate) struct TokenStream<'input> {
+    // The current position in the token stream. It represents the index of the current token being processed.
     pub(crate) position: usize,
+    // The starting index of the current token in the input string.
+    // This is used to identify the beginning of the current token in the original input string.
     pub(crate) start: usize,
+    // The ending index of the current token in the input string.
+    // This is used to identify the end of the current token in the original input string.
     pub(crate) end: usize,
+    // The `Tokens` object that contains the extracted tokens.
+    // It is parameterized by the same lifetime `'input` as the `TokenStream`.
+    // This allows the `TokenStream` to borrow the tokens and access them during iteration.
     pub(crate) tokens: Tokens<'input>,
 }
 
