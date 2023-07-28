@@ -14,12 +14,12 @@ impl World {
     pub(crate) fn new(profile: Profile) -> Self {
         let mut builder = LexerBuilder::new();
 
-        let rules = profile.rules.len() + 1;
+        let rules = profile.tokens.len() + 1;
 
         let mut names = VecMap::with_capacity(rules);
         let mut colors = VecMap::with_capacity(rules);
 
-        for rule in profile.rules {
+        for rule in profile.tokens {
             let kind = eq(names.insert(rule.name), colors.insert(rule.color));
 
             builder = builder.token(kind, &rule.regex);

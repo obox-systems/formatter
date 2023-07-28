@@ -1,19 +1,24 @@
-[[rules]]
+[[tokens]]
 name = "whitespace"
 color = "aqua"
 regex = '[ \t\n\f]+'
 
-[[rules]]
+[[tokens]]
 name = "string"
 color = "yellow"
 regex = '"([^"\\]|\\.)*"'
 
-[[rules]]
+[[tokens]]
 name = "block_comment"
 color = "yellow"
 regex = '/\*[\s\S]*?\*/'
 
-[[rules]]
+[[tokens]]
 name = "line_comment"
 color = "yellow"
 regex = '//[^\n]*'
+
+[[rules]]
+before = ""
+action = ""
+after = ""
