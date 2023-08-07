@@ -14,8 +14,9 @@ pub fn format(input: &str, profile: ir::Profile) -> String {
 
         if let Some(prev) = tokens.prev() {
             for rule in &profile.rules {
-                if (lexer.kind(&rule.before) == prev.kind || rule.before == "any")
-                    && (lexer.kind(&rule.after) == token.kind || rule.before == "any")
+                if rule.before == "any"
+                    || lexer.kind(&rule.before) == prev.kind
+                        && lexer.kind(&rule.after) == token.kind
                 {
                     if runnable {
                         output.push_str(&rule.action);
