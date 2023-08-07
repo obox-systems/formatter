@@ -17,7 +17,7 @@ impl<'input> Tokens<'input> {
             position: 0,
             start: 0,
             end: 0,
-            tokens: self,
+            lexed: self,
         }
     }
 }
@@ -36,12 +36,19 @@ pub(crate) struct TokenStream<'input> {
     // The `Tokens` object that contains the extracted tokens.
     // It is parameterized by the same lifetime `'input` as the `TokenStream`.
     // This allows the `TokenStream` to borrow the tokens and access them during iteration.
-    pub(crate) tokens: Tokens<'input>,
+    pub(crate) lexed: Tokens<'input>,
 }
 
 impl<'input> TokenStream<'input> {
-    pub(crate) fn next(&mut self) -> Option<&Token> {
-        let token = self.tokens.tokens.get(self.position);
+    pub(crate) fn prev(&self) -> Option<Token> {
+        self.lexed
+            .tokens
+            .get(self.position.checked_sub(2)?)
+            .copied()
+    }
+
+    pub(crate) fn next(&mut self) -> Option<Token> {
+        let token = self.lexed.tokens.get(self.position).copied();
 
         if let Some(token) = token {
             self.position += 1;
@@ -54,7 +61,7 @@ impl<'input> TokenStream<'input> {
     }
 
     pub(crate) fn slice(&self) -> &str {
-        &self.tokens.input[self.start..self.end]
+        &self.lexed.input[self.start..self.end]
     }
 }
 
@@ -115,7 +122,7 @@ mod tests {
 
     #[test]
     fn highlight() {
-        traverse("tests", "md", |input, expected| {
+        traverse("tests/assets/lex", "md", |input, expected| {
             let input = crate::highlight::highlight(
                 &std::fs::read_to_string(input).unwrap(),
                 Markdown.into(),

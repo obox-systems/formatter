@@ -1,19 +1,19 @@
 use serde::{Deserialize, Serialize};
 
-pub(crate) type Tokens = Vec<Token>;
+pub type Tokens = Vec<Token>;
 
 /// Represents a Profile containing tokens and rules.
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Profile {
     /// The tokens associated with this profile.
-    pub(crate) tokens: Tokens,
+    pub tokens: Tokens,
     /// The rules associated with this profile.
-    pub(crate) rules: Vec<Rule>,
+    pub rules: Vec<Rule>,
 }
 
 /// Represents a Token with its name, color, and regex pattern.
 #[derive(Debug, Deserialize, Serialize)]
-pub(crate) struct Token {
+pub struct Token {
     /// The name of the token.
     pub(crate) name: String,
     /// The color associated with the token.
@@ -24,7 +24,7 @@ pub(crate) struct Token {
 
 /// Represents a Rule that defines an action to be taken before and after a specific event.
 #[derive(Debug, Deserialize, Serialize)]
-pub(crate) struct Rule {
+pub struct Rule {
     /// The condition or event that occurs before the action is triggered.
     pub(crate) before: String,
     /// The action to be taken when the specified condition or event is met.

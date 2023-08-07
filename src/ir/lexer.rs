@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::ir::profile::Tokens;
 use crate::vec_map::VecMap;
 
@@ -9,11 +11,14 @@ use super::lexed;
 #[allow(dead_code)]
 pub struct Lexer {
     // `names` is a private vector-based map (VecMap) that stores strings associated with some indices.
-    pub(crate) names: VecMap<String>,
+    pub(crate) kind_name: VecMap<String>,
+    pub(crate) name_kind: HashMap<String, TokenKind>,
     // `colors` is a private vector-based map (VecMap) that stores strings associated with some indices.
     pub(crate) colors: VecMap<String>,
     // `lexer` is a private field of type `Lexer0`, representing the core lexer functionality.
     pub(crate) lexer: Lexer0,
+
+    pub(crate) any: TokenKind,
 }
 impl Lexer {
     /// Constructs a new lexer profile based on the provided tokens.
@@ -46,31 +51,49 @@ impl Lexer {
     ///
     /// let profile = Profile::new(tokens);
     /// ```
-    pub(crate) fn new(tokens: Tokens) -> Self {
+    pub fn new(tokens: Tokens) -> Self {
         let mut builder = LexerBuilder::new();
 
         // Calculate the number of rules, adding 1 to account for an extra rule.
-        let rules = tokens.len() + 1;
+        let rules = tokens.len() + 2;
 
-        let mut names = VecMap::with_capacity(rules);
+        let mut name_kind = HashMap::new();
+        let mut kind_name = VecMap::with_capacity(rules);
         let mut colors = VecMap::with_capacity(rules);
 
         for rule in tokens {
-            let kind = ensure_equal(names.insert(rule.name), colors.insert(rule.color));
+            let kind = ensure_equal(
+                kind_name.insert(rule.name.clone()),
+                colors.insert(rule.color),
+            );
+            name_kind.insert(rule.name, kind);
             builder = builder.token(kind, &rule.regex);
         }
 
+        let any = ensure_equal(
+            kind_name.insert("any".to_owned()),
+            colors.insert("black".to_owned()),
+        );
+        name_kind.insert("any".to_string(), any);
+
         // Create an error token for cases where the input does not match any specified rule.
         let error_token = ensure_equal(
-            names.insert("Error".to_owned()),
+            kind_name.insert("Error".to_owned()),
             colors.insert("black".to_owned()),
         );
 
         Self {
-            names,
+            kind_name,
+            name_kind,
             colors,
+            any,
             lexer: builder.error_token(error_token).build(),
         }
+    }
+
+    #[track_caller]
+    pub fn kind(&self, name: &str) -> TokenKind {
+        self.name_kind[name]
     }
 
     /// Provides access to the color associated with a specific `TokenKind`.

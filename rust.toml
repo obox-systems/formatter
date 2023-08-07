@@ -18,7 +18,27 @@ name = "line_comment"
 color = "yellow"
 regex = '//[^\n]*'
 
+[[tokens]]
+name = "open_paren"
+color = "yellow"
+regex = '\('
+
+[[tokens]]
+name = "close_paren"
+color = "yellow"
+regex = '\)'
+
 [[rules]]
-before = ""
+before = "open_paren"
 action = ""
-after = ""
+after = "close_paren"
+
+[[rules]]
+before = "close_paren"
+action = " "
+after = "any"
+
+[[rules]]
+before = "any"
+action = " "
+after = "open_paren"

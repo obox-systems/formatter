@@ -4,4 +4,4 @@ pub(crate) mod profile;
 
 // pub(crate) use lexed::{Lexed, LexerReader};
 pub use lexer::Lexer;
-pub use profile::Profile;
+pub use profile::{Profile, Token, Tokens};
