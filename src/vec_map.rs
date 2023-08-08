@@ -1,4 +1,4 @@
-use m_lexer::TokenKind;
+use crate::lexer::TokenKind;
 
 pub(crate) struct VecMap<T> {
     values: Vec<T>,

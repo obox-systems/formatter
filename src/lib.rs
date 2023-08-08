@@ -2,6 +2,7 @@
 
 mod highlight;
 pub mod ir;
+mod lexer;
 mod vec_map;
 
 pub fn format(input: &str, profile: ir::Profile) -> String {

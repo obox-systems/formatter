@@ -1,9 +1,8 @@
 use std::collections::HashMap;
 
 use crate::ir::profile::Tokens;
+use crate::lexer::{Lexer as Lexer0, LexerBuilder, TokenKind};
 use crate::vec_map::VecMap;
-
-use m_lexer::{Lexer as Lexer0, LexerBuilder, TokenKind};
 
 use super::lexed;
 
@@ -52,7 +51,7 @@ impl Lexer {
     /// let profile = Profile::new(tokens);
     /// ```
     pub fn new(tokens: Tokens) -> Self {
-        let mut builder = LexerBuilder::new();
+        let mut builder = LexerBuilder::default();
 
         // Calculate the number of rules, adding 1 to account for an extra rule.
         let rules = tokens.len() + 2;

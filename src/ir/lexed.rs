@@ -1,4 +1,4 @@
-use m_lexer::Token;
+use crate::lexer::Token;
 
 // Define a public, crate-visible struct called Tokens.
 // This struct holds references to an input string and a vector of Token objects.
