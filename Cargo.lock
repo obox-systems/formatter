@@ -3,32 +3,6 @@
 version = 3
 
 [[package]]
-name = "addr2line"
-version = "0.20.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f4fa78e18c64fce05e902adecd7a5eed15a5e0a3439f7b0e169f0252214865e3"
-dependencies = [
- "gimli",
-]
-
-[[package]]
-name = "adler"
-version = "1.0.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f26201604c87b1e01bd3d98f8d5d9a8fcbb815e8cedb41ffccbeb4bf593a35fe"
-
-[[package]]
-name = "ahash"
-version = "0.7.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fcb51a0695d8f838b1ee009b3fbf66bda078cd64590202a864a8f3e8c4315c47"
-dependencies = [
- "getrandom",
- "once_cell",
- "version_check",
-]
-
-[[package]]
 name = "aho-corasick"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -48,9 +22,9 @@ dependencies = [
 
 [[package]]
 name = "anyhow"
-version = "1.0.71"
+version = "1.0.72"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9c7d0618f0e0b7e8ff11427422b64564d5fb0be1940354bfe2e0529b18a9d9b8"
+checksum = "3b13c32d80ecc7ab747b80c3784bce54ee8a7a0cc4fbda9bf4cda2cf6fe90854"
 
 [[package]]
 name = "anymap"
@@ -65,40 +39,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
-name = "backtrace"
-version = "0.3.68"
+name = "bit-set"
+version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4319208da049c43661739c5fade2ba182f09d1dc2299b32298d3a31692b17e12"
+checksum = "0700ddab506f33b20a03b13996eccd309a48e5ff77d0d95926aa0210fb4e95f1"
 dependencies = [
- "addr2line",
- "cc",
- "cfg-if",
- "libc",
- "miniz_oxide",
- "object",
- "rustc-demangle",
+ "bit-vec",
 ]
 
 [[package]]
-name = "backtrace-ext"
-version = "0.2.1"
+name = "bit-vec"
+version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "537beee3be4a18fb023b570f80e3ae28003db9167a751266b259926e25539d50"
-dependencies = [
- "backtrace",
-]
-
-[[package]]
-name = "bitflags"
-version = "2.3.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "630be753d4e58660abd17930c71b647fe46c27ea6b63cc59e1e3851406972e42"
-
-[[package]]
-name = "cc"
-version = "1.0.79"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "50d30906286121d95be3d479533b458f87493b30a4b5f79a607db8f5d11aa91f"
+checksum = "349f9b6a179ed607305526ca489b34ad0a41aed5f7980fa90eb03160b69598fb"
 
 [[package]]
 name = "cfg-if"
@@ -109,7 +62,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "clone_dyn"
 version = "0.1.0"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "clone_dyn_meta",
 ]
@@ -117,21 +70,16 @@ dependencies = [
 [[package]]
 name = "clone_dyn_meta"
 version = "0.1.1"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "proc_macro_tools",
 ]
 
 [[package]]
-name = "colored"
-version = "2.0.4"
+name = "closure"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2674ec482fbc38012cf31e6c42ba0177b431a0cb6f15fe40efa5aab1bda516f6"
-dependencies = [
- "is-terminal",
- "lazy_static",
- "windows-sys",
-]
+checksum = "d6173fd61b610d15a7566dd7b7620775627441c4ab9dac8906e17cb93a24b782"
 
 [[package]]
 name = "convert_case"
@@ -225,7 +173,7 @@ dependencies = [
 [[package]]
 name = "data_type"
 version = "0.1.9"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "either",
  "type_constructor",
@@ -248,7 +196,7 @@ dependencies = [
 [[package]]
 name = "derive_tools"
 version = "0.1.5"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "clone_dyn",
  "derive_more",
@@ -259,7 +207,7 @@ dependencies = [
 [[package]]
 name = "diagnostics_tools"
 version = "0.1.4"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "pretty_assertions",
 ]
@@ -271,89 +219,72 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "56254986775e3233ffa9c4d7d3faaf6d36a2c09d30b20687e9f88bc8bafc16c8"
 
 [[package]]
-name = "dissimilar"
-version = "1.0.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "210ec60ae7d710bed8683e333e9d2855a8a56a3e9892b38bad3bb0d4d29b0d5e"
-
-[[package]]
 name = "either"
 version = "1.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
 
 [[package]]
+name = "enum_dispatch"
+version = "0.3.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8f33313078bb8d4d05a2733a94ac4c2d8a0df9a2b84424ebf4f33bfc224a890e"
+dependencies = [
+ "once_cell",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.27",
+]
+
+[[package]]
 name = "equivalent"
-version = "1.0.0"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "88bffebc5d80432c9b140ee17875ff173a8ab62faad5b257da912bd2f6c1c0a1"
-
-[[package]]
-name = "errno"
-version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4bcfec3a70f97c962c307b2d2c56e358cf1d00b558d74262b5f929ee8cc7e73a"
-dependencies = [
- "errno-dragonfly",
- "libc",
- "windows-sys",
-]
-
-[[package]]
-name = "errno-dragonfly"
-version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "aa68f1b12764fab894d2755d2518754e71b4fd80ecfb822714a1206c2aab39bf"
-dependencies = [
- "cc",
- "libc",
-]
+checksum = "5443807d6dff69373d433ab9ef5378ad8df50ca6298caf15de6e52e24aaf54d5"
 
 [[package]]
 name = "error_tools"
 version = "0.1.5"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "anyhow",
  "thiserror",
 ]
 
 [[package]]
-name = "expect-test"
-version = "1.4.1"
+name = "fancy-regex"
+version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "30d9eafeadd538e68fb28016364c9732d78e420b9ff8853fa5e4058861e9f8d3"
+checksum = "b95f7c0680e4142284cf8b22c14a476e87d61b004a3a0861872b32ef7ead40a2"
 dependencies = [
- "dissimilar",
- "once_cell",
+ "bit-set",
+ "regex",
 ]
 
 [[package]]
 name = "for_each"
 version = "0.1.4"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 
 [[package]]
 name = "formatter"
 version = "0.1.0"
 dependencies = [
- "colored",
- "expect-test",
+ "enum_dispatch",
+ "fancy-regex",
  "itertools 0.11.0",
  "jwalk",
  "miette",
- "pretty_assertions",
  "serde",
  "toml",
- "unicode-ident",
- "unicode-xid",
+ "urlencoding",
  "wca",
 ]
 
 [[package]]
 name = "former"
 version = "0.1.12"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "former_meta",
  "former_runtime",
@@ -362,7 +293,7 @@ dependencies = [
 [[package]]
 name = "former_meta"
 version = "0.1.12"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "iter_tools",
  "proc-macro2",
@@ -374,7 +305,7 @@ dependencies = [
 [[package]]
 name = "former_runtime"
 version = "0.1.12"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 
 [[package]]
 name = "getrandom"
@@ -385,21 +316,6 @@ dependencies = [
  "cfg-if",
  "libc",
  "wasi",
-]
-
-[[package]]
-name = "gimli"
-version = "0.27.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b6c80984affa11d98d1b88b66ac8853f143217b399d3c74116778ff8fdb4ed2e"
-
-[[package]]
-name = "hashbrown"
-version = "0.12.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8a9ee70c43aaf417c914396645a0fa852624801b24ebb7ae78fe8272889ac888"
-dependencies = [
- "ahash",
 ]
 
 [[package]]
@@ -423,12 +339,12 @@ checksum = "443144c8cdadd93ebf52ddb4056d257f5b52c04d3c804e657d19eb73fc33668b"
 [[package]]
 name = "implements"
 version = "0.1.2"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 
 [[package]]
 name = "impls_index"
 version = "0.1.4"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "impls_index_meta",
 ]
@@ -436,7 +352,7 @@ dependencies = [
 [[package]]
 name = "impls_index_meta"
 version = "0.1.2"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "proc_macro_tools",
 ]
@@ -448,40 +364,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d5477fe2230a79769d8dc68e0eabf5437907c0457a5614a9e8dddb67f65eb65d"
 dependencies = [
  "equivalent",
- "hashbrown 0.14.0",
+ "hashbrown",
 ]
 
 [[package]]
 name = "inspect_type"
 version = "0.1.3"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
-
-[[package]]
-name = "is-terminal"
-version = "0.4.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cb0889898416213fab133e1d33a0e5858a48177452750691bde3666d0fdbaf8b"
-dependencies = [
- "hermit-abi",
- "rustix",
- "windows-sys",
-]
-
-[[package]]
-name = "is_ci"
-version = "1.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "616cde7c720bb2bb5824a224687d8f77bfd38922027f01d825cd7453be5099fb"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 
 [[package]]
 name = "is_slice"
 version = "0.1.1"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 
 [[package]]
 name = "iter_tools"
 version = "0.1.4"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "itertools 0.10.5",
 ]
@@ -513,12 +412,6 @@ dependencies = [
  "crossbeam",
  "rayon",
 ]
-
-[[package]]
-name = "lazy_static"
-version = "1.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "lexical"
@@ -600,12 +493,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b4668fb0ea861c1df094127ac5f1da3409a82116a4ba74fca2e58ef927159bb3"
 
 [[package]]
-name = "linux-raw-sys"
-version = "0.4.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "09fc20d2ca12cb9f044c93e3bd6d32d523e6e2ec3db4f7b2939cd99026ecd3f0"
-
-[[package]]
 name = "literally"
 version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -620,7 +507,7 @@ checksum = "b06a4cde4c0f271a446782e3eff8de789548ce57dbc8eca9292c27f4a42004b4"
 [[package]]
 name = "mem_tools"
 version = "0.1.1"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 
 [[package]]
 name = "memchr"
@@ -640,7 +527,7 @@ dependencies = [
 [[package]]
 name = "meta_tools"
 version = "0.2.18"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "for_each",
  "former",
@@ -654,7 +541,7 @@ dependencies = [
 [[package]]
 name = "meta_tools_min"
 version = "0.2.13"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "for_each",
  "impls_index",
@@ -665,34 +552,25 @@ dependencies = [
 
 [[package]]
 name = "miette"
-version = "5.9.0"
+version = "5.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a236ff270093b0b67451bc50a509bd1bad302cb1d3c7d37d5efe931238581fa9"
+checksum = "59bb584eaeeab6bd0226ccf3509a69d7936d148cf3d036ad350abe35e8c6856e"
 dependencies = [
- "backtrace",
- "backtrace-ext",
- "is-terminal",
  "miette-derive",
  "once_cell",
- "owo-colors",
- "supports-color",
- "supports-hyperlinks",
- "supports-unicode",
- "terminal_size",
- "textwrap",
  "thiserror",
  "unicode-width",
 ]
 
 [[package]]
 name = "miette-derive"
-version = "5.9.0"
+version = "5.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4901771e1d44ddb37964565c654a3223ba41a594d02b8da471cc4464912b5cfa"
+checksum = "49e7bc1560b95a3c4a25d03de42fe76ca718ab92d1a22a55b9b4cf67b3ae635c"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.25",
+ "syn 2.0.27",
 ]
 
 [[package]]
@@ -702,18 +580,9 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "68354c5c6bd36d73ff3feceb05efa59b6acb7626617f4962be322a825e61f79a"
 
 [[package]]
-name = "miniz_oxide"
-version = "0.7.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e7810e0be55b428ada41041c41f32c9f1a42817901b4ccf45fa3d4b6561e74c7"
-dependencies = [
- "adler",
-]
-
-[[package]]
 name = "mod_interface"
 version = "0.1.16"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "mod_interface_meta",
  "mod_interface_runtime",
@@ -722,7 +591,7 @@ dependencies = [
 [[package]]
 name = "mod_interface_meta"
 version = "0.1.11"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "derive_tools",
  "proc_macro_tools",
@@ -731,7 +600,7 @@ dependencies = [
 [[package]]
 name = "mod_interface_runtime"
 version = "0.1.2"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 
 [[package]]
 name = "nom"
@@ -754,15 +623,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "object"
-version = "0.31.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8bda667d9f2b5051b8833f59f3bf748b28ef54f850f4fcb389a252aa383866d1"
-dependencies = [
- "memchr",
-]
-
-[[package]]
 name = "once_cell"
 version = "1.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -776,12 +636,6 @@ checksum = "628223faebab4e3e40667ee0b2336d34a5b960ff60ea743ddfdbcf7770bcfb66"
 dependencies = [
  "winapi",
 ]
-
-[[package]]
-name = "owo-colors"
-version = "3.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c1b04fb49957986fdce4d6ee7a65027d55d4b6d2265e5848bbb507b58ccfdb6f"
 
 [[package]]
 name = "parse-display"
@@ -811,9 +665,9 @@ dependencies = [
 
 [[package]]
 name = "paste"
-version = "1.0.13"
+version = "1.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b4b27ab7be369122c218afc2079489cdcb4b517c0a3fc386ff11e1fedfcc2b35"
+checksum = "de3145af08024dea9fa9914f381a17b8fc6034dfb00f3a84013f7ff43f29ed4c"
 
 [[package]]
 name = "phf"
@@ -885,9 +739,9 @@ checksum = "dc375e1527247fe1a97d8b7156678dfe7c1af2fc075c9a4db3690ecd2a148068"
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.64"
+version = "1.0.66"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "78803b62cbf1f46fde80d7c0e803111524b9877184cfe7c3033659490ac7a7da"
+checksum = "18fb31db3f9bddb2ea821cde30a9f70117e3f119938b5ee630b7403aa6e2ead9"
 dependencies = [
  "unicode-ident",
 ]
@@ -895,7 +749,7 @@ dependencies = [
 [[package]]
 name = "proc_macro_tools"
 version = "0.1.18"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -906,9 +760,9 @@ dependencies = [
 
 [[package]]
 name = "quote"
-version = "1.0.29"
+version = "1.0.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "573015e8ab27661678357f27dc26460738fd2b6c86e46f386fde94cb5d913105"
+checksum = "5fe8a65d69dd0808184ebb5f836ab526bb259db23c657efa38711b1072ee47f0"
 dependencies = [
  "proc-macro2",
 ]
@@ -974,18 +828,18 @@ dependencies = [
  "aho-corasick",
  "memchr",
  "regex-automata",
- "regex-syntax 0.7.3",
+ "regex-syntax 0.7.4",
 ]
 
 [[package]]
 name = "regex-automata"
-version = "0.3.2"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "83d3daa6976cffb758ec878f108ba0e062a45b2d6ca3a2cca965338855476caf"
+checksum = "39354c10dd07468c2e73926b23bb9c2caca74c5501e38a35da70406f1d923310"
 dependencies = [
  "aho-corasick",
  "memchr",
- "regex-syntax 0.7.3",
+ "regex-syntax 0.7.4",
 ]
 
 [[package]]
@@ -996,15 +850,9 @@ checksum = "f162c6dd7b008981e4d40210aca20b4bd0f9b60ca9271061b07f78537722f2e1"
 
 [[package]]
 name = "regex-syntax"
-version = "0.7.3"
+version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2ab07dc67230e4a4718e70fd5c20055a4334b121f1f9db8fe63ef39ce9b8c846"
-
-[[package]]
-name = "rustc-demangle"
-version = "0.1.23"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d626bb9dae77e28219937af045c257c28bfd3f69333c512553507f5f9798cb76"
+checksum = "e5ea92a5b6195c6ef2a0295ea818b312502c6fc94dde986c5553242e18fd4ce2"
 
 [[package]]
 name = "rustc_version"
@@ -1016,54 +864,41 @@ dependencies = [
 ]
 
 [[package]]
-name = "rustix"
-version = "0.38.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ac5ffa1efe7548069688cd7028f32591853cd7b5b756d41bcffd2353e4fc75b4"
-dependencies = [
- "bitflags",
- "errno",
- "libc",
- "linux-raw-sys",
- "windows-sys",
-]
-
-[[package]]
 name = "rustversion"
-version = "1.0.13"
+version = "1.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dc31bd9b61a32c31f9650d18add92aa83a49ba979c143eefd27fe7177b05bd5f"
+checksum = "7ffc183a10b4478d04cbbbfc96d0873219d962dd5accaff2ffbd4ceb7df837f4"
 
 [[package]]
 name = "scopeguard"
-version = "1.1.0"
+version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
+checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
 
 [[package]]
 name = "semver"
-version = "1.0.17"
+version = "1.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bebd363326d05ec3e2f532ab7660680f3b02130d780c299bca73469d521bc0ed"
+checksum = "b0293b4b29daaf487284529cc2f5675b8e57c61f70167ba415a463651fd6a918"
 
 [[package]]
 name = "serde"
-version = "1.0.171"
+version = "1.0.174"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "30e27d1e4fd7659406c492fd6cfaf2066ba8773de45ca75e855590f856dc34a9"
+checksum = "3b88756493a5bd5e5395d53baa70b194b05764ab85b59e43e4b8f4e1192fa9b1"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.171"
+version = "1.0.174"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "389894603bd18c46fa56231694f8d827779c0951a667087194cf9de94ed24682"
+checksum = "6e5c3a298c7f978e53536f95a63bdc4c4a64550582f31a0359a9afda6aede62e"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.25",
+ "syn 2.0.27",
 ]
 
 [[package]]
@@ -1082,12 +917,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7bd3e3206899af3f8b12af284fafc038cc1dc2b41d1b89dd17297221c5d225de"
 
 [[package]]
-name = "smawk"
-version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f67ad224767faa3c7d8b6d91985b78e70a1324408abcb1cfcc2be4c06bc06043"
-
-[[package]]
 name = "static_assertions"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1096,7 +925,7 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 [[package]]
 name = "strs_tools"
 version = "0.1.8"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "former",
  "lexical",
@@ -1149,34 +978,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "supports-color"
-version = "2.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4950e7174bffabe99455511c39707310e7e9b440364a2fcb1cc21521be57b354"
-dependencies = [
- "is-terminal",
- "is_ci",
-]
-
-[[package]]
-name = "supports-hyperlinks"
-version = "2.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f84231692eb0d4d41e4cdd0cabfdd2e6cd9e255e65f80c9aa7c98dd502b4233d"
-dependencies = [
- "is-terminal",
-]
-
-[[package]]
-name = "supports-unicode"
-version = "2.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4b6c2cb240ab5dd21ed4906895ee23fe5a48acdbd15a3ce388e7b62a9b66baf7"
-dependencies = [
- "is-terminal",
-]
-
-[[package]]
 name = "syn"
 version = "1.0.109"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1189,9 +990,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.25"
+version = "2.0.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15e3fc8c0c74267e2df136e5e5fb656a464158aa57624053375eb9c8c6e25ae2"
+checksum = "b60f673f44a8255b9c8c657daf66a596d435f2da81a555b06dc644d080ba45e0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1199,50 +1000,29 @@ dependencies = [
 ]
 
 [[package]]
-name = "terminal_size"
-version = "0.1.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "633c1a546cee861a1a6d0dc69ebeca693bf4296661ba7852b9d21d159e0506df"
-dependencies = [
- "libc",
- "winapi",
-]
-
-[[package]]
-name = "textwrap"
-version = "0.15.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b7b3e525a49ec206798b40326a44121291b530c963cfb01018f63e135bac543d"
-dependencies = [
- "smawk",
- "unicode-linebreak",
- "unicode-width",
-]
-
-[[package]]
 name = "thiserror"
-version = "1.0.43"
+version = "1.0.44"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a35fc5b8971143ca348fa6df4f024d4d55264f3468c71ad1c2f365b0a4d58c42"
+checksum = "611040a08a0439f8248d1990b111c95baa9c704c805fa1f62104b39655fd7f90"
 dependencies = [
  "thiserror-impl",
 ]
 
 [[package]]
 name = "thiserror-impl"
-version = "1.0.43"
+version = "1.0.44"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "463fe12d7993d3b327787537ce8dd4dfa058de32fc2b195ef3cde03dc4771e8f"
+checksum = "090198534930841fab3a5d1bb637cde49e339654e606195f8d9c76eeb081dc96"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.25",
+ "syn 2.0.27",
 ]
 
 [[package]]
 name = "time_tools"
 version = "0.1.5"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 
 [[package]]
 name = "toml"
@@ -1267,9 +1047,9 @@ dependencies = [
 
 [[package]]
 name = "toml_edit"
-version = "0.19.12"
+version = "0.19.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c500344a19072298cd05a7224b3c0c629348b78692bf48466c5238656e315a78"
+checksum = "f8123f27e969974a3dfba720fdb560be359f57b44302d280ba72e76a74480e8a"
 dependencies = [
  "indexmap",
  "serde",
@@ -1281,7 +1061,7 @@ dependencies = [
 [[package]]
 name = "type_constructor"
 version = "0.1.20"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "type_constructor_derive_make_meta",
  "type_constructor_derive_pair_meta",
@@ -1290,7 +1070,7 @@ dependencies = [
 [[package]]
 name = "type_constructor_derive_make_meta"
 version = "0.1.0"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1300,7 +1080,7 @@ dependencies = [
 [[package]]
 name = "type_constructor_derive_pair_meta"
 version = "0.1.0"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1310,7 +1090,7 @@ dependencies = [
 [[package]]
 name = "typing_tools"
 version = "0.1.5"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "implements",
  "inspect_type",
@@ -1319,19 +1099,9 @@ dependencies = [
 
 [[package]]
 name = "unicode-ident"
-version = "1.0.10"
+version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "22049a19f4a68748a168c0fc439f9516686aa045927ff767eca0a85101fb6e73"
-
-[[package]]
-name = "unicode-linebreak"
-version = "0.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c5faade31a542b8b35855fff6e8def199853b2da8da256da52f52f1316ee3137"
-dependencies = [
- "hashbrown 0.12.3",
- "regex",
-]
+checksum = "301abaae475aa91687eb82514b328ab47a211a533026cb25fc3e519b86adfc3c"
 
 [[package]]
 name = "unicode-width"
@@ -1340,16 +1110,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c0edd1e5b14653f783770bce4a4dabb4a5108a5370a5f5d8cfe8710c361f6c8b"
 
 [[package]]
-name = "unicode-xid"
-version = "0.2.4"
+name = "urlencoding"
+version = "2.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f962df74c8c05a667b5ee8bcf162993134c104e96440b663c8daa176dc772d8c"
-
-[[package]]
-name = "version_check"
-version = "0.9.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
+checksum = "daf8dba3b7eb870caf1ddeed7bc9d2a049f3cfdfae7cb521b087cc33ae4c49da"
 
 [[package]]
 name = "wasi"
@@ -1360,9 +1124,10 @@ checksum = "9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423"
 [[package]]
 name = "wca"
 version = "0.1.3"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "anymap",
+ "closure",
  "former",
  "log",
  "nom",
@@ -1392,76 +1157,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
-name = "windows-sys"
-version = "0.48.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "677d2418bec65e3338edb076e806bc1ec15693c5d0104683f2efe857f61056a9"
-dependencies = [
- "windows-targets",
-]
-
-[[package]]
-name = "windows-targets"
-version = "0.48.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "05d4b17490f70499f20b9e791dcf6a299785ce8af4d709018206dc5b4953e95f"
-dependencies = [
- "windows_aarch64_gnullvm",
- "windows_aarch64_msvc",
- "windows_i686_gnu",
- "windows_i686_msvc",
- "windows_x86_64_gnu",
- "windows_x86_64_gnullvm",
- "windows_x86_64_msvc",
-]
-
-[[package]]
-name = "windows_aarch64_gnullvm"
-version = "0.48.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "91ae572e1b79dba883e0d315474df7305d12f569b400fcf90581b06062f7e1bc"
-
-[[package]]
-name = "windows_aarch64_msvc"
-version = "0.48.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b2ef27e0d7bdfcfc7b868b317c1d32c641a6fe4629c171b8928c7b08d98d7cf3"
-
-[[package]]
-name = "windows_i686_gnu"
-version = "0.48.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "622a1962a7db830d6fd0a69683c80a18fda201879f0f447f065a3b7467daa241"
-
-[[package]]
-name = "windows_i686_msvc"
-version = "0.48.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4542c6e364ce21bf45d69fdd2a8e455fa38d316158cfd43b3ac1c5b1b19f8e00"
-
-[[package]]
-name = "windows_x86_64_gnu"
-version = "0.48.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ca2b8a661f7628cbd23440e50b05d705db3686f894fc9580820623656af974b1"
-
-[[package]]
-name = "windows_x86_64_gnullvm"
-version = "0.48.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7896dbc1f41e08872e9d5e8f8baa8fdd2677f29468c4e156210174edc7f7b953"
-
-[[package]]
-name = "windows_x86_64_msvc"
-version = "0.48.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1a515f5799fe4961cb532f983ce2b23082366b898e52ffbce459c86f67c8378a"
-
-[[package]]
 name = "winnow"
-version = "0.4.9"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "81a2094c43cc94775293eaa0e499fbc30048a6d824ac82c0351a8c0bf9112529"
+checksum = "81fac9742fd1ad1bd9643b991319f72dd031016d44b77039a26977eb667141e7"
 dependencies = [
  "memchr",
 ]
@@ -1469,12 +1168,12 @@ dependencies = [
 [[package]]
 name = "winterval"
 version = "0.1.6"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 
 [[package]]
 name = "woptions"
 version = "0.1.4"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "former",
  "woptions_meta",
@@ -1484,7 +1183,7 @@ dependencies = [
 [[package]]
 name = "woptions_meta"
 version = "0.1.4"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "convert_case 0.5.0",
  "iter_tools",
@@ -1495,7 +1194,7 @@ dependencies = [
 [[package]]
 name = "woptions_runtime"
 version = "0.1.4"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "former",
 ]
@@ -1503,7 +1202,7 @@ dependencies = [
 [[package]]
 name = "wtools"
 version = "0.2.20"
-source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#e40ba2ede9396fae0e85d93356b23e10da6e3d9b"
+source = "git+https://github.com/Wandalen/wTools.git?branch=alpha#7ce412c4fe076860bbdaa456ff6935e3ab2b026f"
 dependencies = [
  "data_type",
  "derive_tools",
