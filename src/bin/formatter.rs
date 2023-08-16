@@ -37,11 +37,7 @@ fn format(
             .into_diagnostic()
             .with_context(|| format!("reading `{}`", path.display()))?;
 
-        let contents = {
-            let profile = std::fs::read_to_string("rust.toml").unwrap();
-            let profile: formatter::ir::Profile = toml::from_str(&profile).unwrap();
-            formatter::format(&input, profile)
-        };
+        let contents = formatter::format_code(&input);
 
         std::fs::write(&path, contents)
             .into_diagnostic()
