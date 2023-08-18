@@ -1,7 +1,22 @@
 use regex::Regex;
 
+fn transform_list(input_list: &[&[&str]]) -> String {
+    let transformed: Vec<String> = input_list
+        .iter()
+        .map(|sublist| format!("({})", sublist.join("|")))
+        .collect();
+
+    transformed.join("|")
+}
+
 pub fn format_code(input: &str) -> String {
-    let re = Regex::new(r"(\(|\)|\[|\]|[-+*/%^&|<>=])|(\{)").unwrap();
+    let groups = [
+        [r"\(|\)", r"\[|\]", r"[-+*/%^&|<>=]"].as_slice(),
+        [r"\{"].as_slice(),
+    ];
+
+    let re = transform_list(&groups);
+    let re = Regex::new(&re).unwrap();
 
     let formatted = re.replace_all(input, |caps: &regex::Captures| {
         if let Some(idx) = (1..=2).find(|i| caps.get(*i).is_some()) {
