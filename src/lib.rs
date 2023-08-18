@@ -1,49 +1,21 @@
 use regex::Regex;
 
 pub fn format_code(input: &str) -> String {
-    let re_parentheses = Regex::new(r"(\()|(\))").unwrap();
-    let re_brackets = Regex::new(r"(\[)|(\])").unwrap();
-    let re_operators = Regex::new(r"(\+)|(-)|(\*)|(/)|(%)|(\^)|(&)|(\|)|(<)|(>)|(=)").unwrap();
-    let re_curly_braces = Regex::new(r"(\{)").unwrap();
+    let re = Regex::new(r"(\(|\)|\[|\]|[-+*/%^&|<>=])|(\{)").unwrap();
 
-    let formatted = re_parentheses
-        .replace_all(input, |caps: &regex::Captures| {
-            if caps.get(1).is_some() {
-                return "( ".to_string();
+    let formatted = re.replace_all(input, |caps: &regex::Captures| {
+        if let Some(idx) = (1..=2).find(|i| caps.get(*i).is_some()) {
+            match idx {
+                1 => format!(" {} ", &caps[0]),
+                2 => format!("\n{}\n{{", &caps[0]),
+                _ => caps[0].to_string(),
             }
-            if caps.get(2).is_some() {
-                return " )".to_string();
-            }
+        } else {
             caps[0].to_string()
-        })
-        .to_string();
+        }
+    });
 
-    let formatted = re_brackets
-        .replace_all(&formatted, |caps: &regex::Captures| {
-            if caps.get(1).is_some() {
-                return "[ ".to_string();
-            }
-            if caps.get(2).is_some() {
-                return " ]".to_string();
-            }
-            caps[0].to_string()
-        })
-        .to_string();
-
-    let formatted = re_operators
-        .replace_all(&formatted, |caps: &regex::Captures| {
-            let operator = &caps[0];
-            format!(" {} ", operator)
-        })
-        .to_string();
-
-    let formatted = re_curly_braces
-        .replace_all(&formatted, |caps: &regex::Captures| {
-            format!("\n{}\n{{", &caps[0])
-        })
-        .to_string();
-
-    formatted
+    formatted.to_string()
 }
 
 #[cfg(test)]
