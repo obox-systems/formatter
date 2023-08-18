@@ -11,7 +11,11 @@ fn transform_list(input_list: &[&[&str]]) -> String {
 
 pub fn format_code(input: &str) -> String {
     let groups = [
+        // Adding spaces after "(" and before ")"
+        // Adding spaces after "[" and before "]"
+        // Adding spaces between operators
         [r"\(|\)", r"\[|\]", r"[-+*/%^&|<>=]"].as_slice(),
+        // Adding a newline before {
         [r"\{"].as_slice(),
     ];
 
