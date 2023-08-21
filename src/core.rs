@@ -1,6 +1,6 @@
 use regex::Regex;
 
-type CallbackList = Vec<Box<dyn Fn(&str) -> String>>;
+type CallbackList = Vec<fn(&str) -> String>;
 
 pub(crate) trait Plugin {
     const PARTS: &'static [&'static str];
@@ -17,7 +17,7 @@ pub(crate) struct FormatterBuilder {
 impl FormatterBuilder {
     pub(crate) fn plugin<P: Plugin + 'static>(mut self) -> Self {
         self.regex.push(P::PARTS);
-        self.callback_list.push(Box::new(P::run));
+        self.callback_list.push(P::run);
         self
     }
 
