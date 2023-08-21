@@ -1,94 +1,18 @@
-use regex::Regex;
-
-#[derive(Default)]
-struct Builder {
-    groups: Vec<Group>,
-    regex: Vec<Vec<&'static str>>,
-}
-
-impl Builder {
-    fn group(
-        mut self,
-        handler: impl Fn(&str) -> String + 'static,
-        builder: impl FnOnce(&mut Vec<&'static str>),
-    ) -> Self {
-        self.regex.push(Vec::new());
-
-        let stack = self.regex.last_mut().unwrap();
-        builder(stack);
-
-        self.groups.push(Group {
-            handler: Box::new(handler),
-        });
-
-        self
-    }
-
-    fn finish(self) -> Formatter {
-        let groups: Vec<String> = self
-            .regex
-            .iter()
-            .map(|sublist| format!("({})", sublist.join("|")))
-            .collect();
-
-        let regex = groups.join("|");
-        let regex = Regex::new(&regex).unwrap();
-
-        Formatter {
-            groups: self.groups,
-            regex,
-        }
-    }
-}
-
-struct Group {
-    handler: Box<dyn Fn(&str) -> String>,
-}
-
-struct Formatter {
-    groups: Vec<Group>,
-    regex: Regex,
-}
-
-impl Formatter {
-    fn format(&self, input: &str) -> String {
-        let formatted = self.regex.replace_all(input, |caps: &regex::Captures| {
-            for (group, group_index) in self.groups.iter().zip(1usize..) {
-                if let Some(n) = caps.get(group_index) {
-                    return (group.handler)(n.as_str());
-                }
-            }
-
-            caps[0].to_string()
-        });
-
-        formatted.to_string()
-    }
-}
+#[macro_use]
+mod core;
+mod plugins;
 
 pub fn format_code(input: &str) -> String {
-    let formatted = Builder::default()
+    let formatted = core::FormatterBuilder::default()
         // Adding spaces after "(" and before ")"
         // Adding spaces after "[" and before "]"
         // Adding spaces between operators
-        .group(spaces, |group| {
-            group.push(r"\(|\)");
-            group.push(r"\[|\]");
-            group.push(r"[-+*/%^&|<>=]");
-        })
+        .plugin::<plugins::Spaces>()
         // Adding a newline before {
-        .group(newline, |group| group.push(r"\{"))
+        .plugin::<plugins::Newline>()
         .finish();
 
     formatted.format(input)
-}
-
-fn spaces(slice: &str) -> String {
-    format!(" {slice} ")
-}
-
-fn newline(slice: &str) -> String {
-    format!("\n{slice}\n{{")
 }
 
 #[cfg(test)]
