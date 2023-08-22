@@ -58,10 +58,3 @@ impl Formatter {
         formatted.to_string()
     }
 }
-
-#[macro_export]
-macro_rules! regex {
-    ($($pattern:expr),*) => {
-        const PARTS: &'static [&'static str] = &[$($pattern),*];
-    };
-}
