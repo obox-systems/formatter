@@ -1,5 +1,7 @@
-mod newline;
-mod spaces;
+mod braces;
+mod bracket;
+mod parentheses;
 
-pub use newline::Newline;
-pub use spaces::Spaces;
+pub use braces::Braces;
+pub use bracket::Bracket;
+pub use parentheses::Parentheses;

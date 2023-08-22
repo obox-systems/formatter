@@ -3,7 +3,7 @@ use regex::Regex;
 type CallbackList = Vec<fn(&str) -> String>;
 
 pub(crate) trait Plugin {
-    const PARTS: &'static [&'static str];
+    fn positive() -> &'static [&'static str];
 
     fn run(slice: &str) -> String;
 }
@@ -16,7 +16,7 @@ pub(crate) struct FormatterBuilder {
 
 impl FormatterBuilder {
     pub(crate) fn plugin<P: Plugin + 'static>(mut self) -> Self {
-        self.regex.push(P::PARTS);
+        self.regex.push(P::positive());
         self.callback_list.push(P::run);
         self
     }

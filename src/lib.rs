@@ -3,16 +3,18 @@ mod core;
 mod plugins;
 
 pub fn format_code(input: &str) -> String {
-    let formatted = core::FormatterBuilder::default()
+    let formatter = core::FormatterBuilder::default()
         // Adding spaces after "(" and before ")"
+        .plugin::<plugins::Parentheses>()
         // Adding spaces after "[" and before "]"
+        .plugin::<plugins::Bracket>()
         // Adding spaces between operators
-        .plugin::<plugins::Spaces>()
+        // .plugin::<plugins::Operators>()
         // Adding a newline before {
-        .plugin::<plugins::Newline>()
+        .plugin::<plugins::Braces>()
         .finish();
 
-    formatted.format(input)
+    formatter.format(input)
 }
 
 #[cfg(test)]
