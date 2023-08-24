@@ -1,8 +1,12 @@
 pub struct Parentheses;
 
 impl crate::core::Plugin for Parentheses {
-    fn positive() -> &'static [&'static str] {
-        &[r"\(|\)", r"[-+*/%^&|<>=]"]
+    fn positive() -> Vec<&'static str> {
+        vec![r"\(|\)"]
+    }
+
+    fn negative() -> Vec<&'static str> {
+        vec![r"[^\(|\)]"]
     }
 
     fn run(slice: &str) -> String {

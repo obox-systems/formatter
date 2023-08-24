@@ -3,14 +3,15 @@ mod plugins;
 
 pub fn format_code(input: &str) -> String {
     let formatter = core::FormatterBuilder::default()
+        .plugin::<plugins::Ident>()
         // Adding spaces after "(" and before ")"
         .plugin::<plugins::Parentheses>()
         // Adding spaces after "[" and before "]"
         .plugin::<plugins::Bracket>()
-        // Adding spaces between operators
-        // .plugin::<plugins::Operators>()
         // Adding a newline before {
         .plugin::<plugins::Braces>()
+        // Adding spaces between operators
+        .plugin::<plugins::Operators>()
         .finish();
 
     formatter.format(input)

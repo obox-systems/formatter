@@ -1,17 +1,19 @@
-use regex::Regex;
+use fancy_regex::Regex;
 
 type CallbackList = Vec<fn(&str) -> String>;
 
 pub(crate) trait Plugin {
-    fn positive() -> &'static [&'static str];
-
+    fn positive() -> Vec<&'static str>;
+    fn negative() -> Vec<&'static str> {
+        vec![]
+    }
     fn run(slice: &str) -> String;
 }
 
 #[derive(Default)]
 pub(crate) struct FormatterBuilder {
     pub(crate) callback_list: CallbackList,
-    pub(crate) regex: Vec<&'static [&'static str]>,
+    pub(crate) regex: Vec<Vec<&'static str>>,
 }
 
 impl FormatterBuilder {
@@ -29,7 +31,12 @@ impl FormatterBuilder {
             .collect();
 
         let regex = groups.join("|");
-        let regex = Regex::new(&regex).unwrap();
+        let regex = match Regex::new(&regex) {
+            Ok(regex) => regex,
+            Err(err) => {
+                panic!("{err:?}: {regex}")
+            }
+        };
 
         Formatter {
             callback_list: self.callback_list,
@@ -45,15 +52,17 @@ pub(crate) struct Formatter {
 
 impl Formatter {
     pub(crate) fn format(&self, input: &str) -> String {
-        let formatted = self.regex.replace_all(input, |caps: &regex::Captures| {
-            for (group, group_index) in self.callback_list.iter().zip(1usize..) {
-                if let Some(n) = caps.get(group_index) {
-                    return (group)(n.as_str());
+        let formatted = self
+            .regex
+            .replace_all(input, |caps: &fancy_regex::Captures| {
+                for (group, group_index) in self.callback_list.iter().zip(1usize..) {
+                    if let Some(n) = caps.get(group_index) {
+                        return (group)(n.as_str());
+                    }
                 }
-            }
 
-            caps[0].to_string()
-        });
+                caps[0].to_string()
+            });
 
         formatted.to_string()
     }
