@@ -1,49 +1,20 @@
-use regex::Regex;
+mod core;
+mod plugins;
 
 pub fn format_code(input: &str) -> String {
-    let re_parentheses = Regex::new(r"(\()|(\))").unwrap();
-    let re_brackets = Regex::new(r"(\[)|(\])").unwrap();
-    let re_operators = Regex::new(r"(\+)|(-)|(\*)|(/)|(%)|(\^)|(&)|(\|)|(<)|(>)|(=)").unwrap();
-    let re_curly_braces = Regex::new(r"(\{)").unwrap();
+    let formatter = core::FormatterBuilder::default()
+        .plugin::<plugins::Ident>()
+        // Adding spaces after "(" and before ")"
+        .plugin::<plugins::Parentheses>()
+        // Adding spaces after "[" and before "]"
+        .plugin::<plugins::Bracket>()
+        // Adding a newline before {
+        .plugin::<plugins::Braces>()
+        // Adding spaces between operators
+        .plugin::<plugins::Operators>()
+        .finish();
 
-    let formatted = re_parentheses
-        .replace_all(input, |caps: &regex::Captures| {
-            if caps.get(1).is_some() {
-                return "( ".to_string();
-            }
-            if caps.get(2).is_some() {
-                return " )".to_string();
-            }
-            caps[0].to_string()
-        })
-        .to_string();
-
-    let formatted = re_brackets
-        .replace_all(&formatted, |caps: &regex::Captures| {
-            if caps.get(1).is_some() {
-                return "[ ".to_string();
-            }
-            if caps.get(2).is_some() {
-                return " ]".to_string();
-            }
-            caps[0].to_string()
-        })
-        .to_string();
-
-    let formatted = re_operators
-        .replace_all(&formatted, |caps: &regex::Captures| {
-            let operator = &caps[0];
-            format!(" {} ", operator)
-        })
-        .to_string();
-
-    let formatted = re_curly_braces
-        .replace_all(&formatted, |caps: &regex::Captures| {
-            format!("\n{}\n{{", &caps[0])
-        })
-        .to_string();
-
-    formatted
+    formatter.format(input)
 }
 
 #[cfg(test)]
