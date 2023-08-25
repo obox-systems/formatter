@@ -3,10 +3,13 @@ use fancy_regex::Regex;
 type CallbackList = Vec<fn(&str) -> String>;
 
 pub(crate) trait Plugin {
+    /// Returns a vector of positive patterns that this plugin should match.
     fn positive() -> Vec<&'static str>;
+    /// Returns a vector of negative patterns that this plugin should not match.
     fn negative() -> Vec<&'static str> {
         vec![]
     }
+    /// Executes the plugin's logic on the given input slice and returns the result as a string.
     fn run(slice: &str) -> String;
 }
 
