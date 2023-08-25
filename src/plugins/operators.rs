@@ -11,7 +11,6 @@ impl crate::core::Plugin for Operators {
     }
 
     fn run(slice: &str) -> String {
-        dbg!(slice);
         format!(" {slice} ")
     }
 }
