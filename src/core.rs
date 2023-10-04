@@ -17,12 +17,17 @@ pub(crate) trait Plugin {
 pub(crate) struct FormatterBuilder {
     pub(crate) callback_list: CallbackList,
     pub(crate) regex: Vec<Vec<&'static str>>,
+    #[cfg(debug_assertions)]
+    pub(crate) names: Vec<&'static str>,
 }
 
 impl FormatterBuilder {
     pub(crate) fn plugin<P: Plugin + 'static>(mut self) -> Self {
         self.regex.push(P::positive());
         self.callback_list.push(P::run);
+        if cfg!(debug_assertions) {
+            self.names.push(std::any::type_name::<P>());
+        }
         self
     }
 
@@ -44,6 +49,8 @@ impl FormatterBuilder {
         Formatter {
             callback_list: self.callback_list,
             regex,
+            #[cfg(debug_assertions)]
+            names: self.names,
         }
     }
 }
@@ -51,6 +58,8 @@ impl FormatterBuilder {
 pub(crate) struct Formatter {
     pub(crate) callback_list: CallbackList,
     pub(crate) regex: Regex,
+    #[cfg(debug_assertions)]
+    pub(crate) names: Vec<&'static str>,
 }
 
 impl Formatter {
@@ -60,7 +69,17 @@ impl Formatter {
             .replace_all(input, |caps: &fancy_regex::Captures| {
                 for (group, group_index) in self.callback_list.iter().zip(1usize..) {
                     if let Some(n) = caps.get(group_index) {
-                        return (group)(n.as_str());
+                        let done = (group)(n.as_str());
+
+                        #[allow(clippy::overly_complex_bool_expr)]
+                        if false && cfg!(debug_assertions) {
+                            println!(
+                                "{} = {:?} as {done:?}",
+                                &self.names[group_index - 1],
+                                n.as_str()
+                            );
+                        }
+                        return done;
                     }
                 }
 

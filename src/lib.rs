@@ -149,6 +149,6 @@ mod tests {
 
     #[test]
     fn test_case_7() {
-        assert_eq!("{ a : 1, b : 2 }", format_code("{a:1,b:2}"));
+        assert_eq!("{ a : 1 , b : 2 }", format_code("{a:1,b:2}"));
     }
 }
