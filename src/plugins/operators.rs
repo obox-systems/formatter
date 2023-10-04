@@ -11,6 +11,7 @@ impl crate::core::Plugin for Operators {
     }
 
     fn run(slice: &str) -> String {
-        format!(" {slice} ")
+        // format!(" {slice} ")
+        slice.to_string()
     }
 }

@@ -87,6 +87,13 @@ println!("x is greater than 5");
         }
     }
 
+    #[test]
+    fn test_case() {
+        // f1( x ) , f2( y ) , f3()
+        println!("{}", super::format_code("f1( x ),f2(y) , f3()"));
+        println!("{:?}", super::format_code("f1( x ),f2(y) , f3()"));
+    }
+
     // #[test]
     // fn highlight() {
     //     traverse("tests/assets/lex", "md", |input, expected| {
