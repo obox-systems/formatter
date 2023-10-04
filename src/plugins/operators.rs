@@ -2,16 +2,10 @@ pub struct Operators;
 
 impl crate::core::Plugin for Operators {
     fn positive() -> Vec<&'static str> {
-        std::iter::empty()
-            .chain(super::Braces::negative())
-            .chain(super::Bracket::negative())
-            .chain(super::Ident::negative())
-            .chain(super::Parentheses::negative())
-            .collect()
+        vec![r"\(\s*", r"\s*\)", r"\s*,\s*"]
     }
 
     fn run(slice: &str) -> String {
-        // format!(" {slice} ")
-        slice.to_string()
+        format!(" {} ", slice.trim())
     }
 }

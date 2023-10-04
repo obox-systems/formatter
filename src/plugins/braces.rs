@@ -10,6 +10,6 @@ impl crate::core::Plugin for Braces {
     }
 
     fn run(slice: &str) -> String {
-        format!("\n{slice}\n{{")
+        format!("{{{}\n}}", slice)
     }
 }
