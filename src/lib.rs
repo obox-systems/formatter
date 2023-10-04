@@ -58,14 +58,17 @@ mod tests {
         }
     }
 
-    fn traverse(root: &str, expected_ext: &str, mut f: impl FnMut(PathBuf, PathBuf)) {
+    fn traverse(root: &str, expected_extension: &str, mut f: impl FnMut(PathBuf, PathBuf)) {
         for entry in std::fs::read_dir(root).unwrap() {
             let input_path = entry.unwrap().path();
-            let expected_path = with_extension(&input_path, expected_ext);
+            let expected_path = with_extension(&input_path, expected_extension);
 
-            if input_path.extension().unwrap_or_default() == expected_ext {
-                continue;
-            };
+            {
+                let extension = input_path.extension().unwrap_or_default();
+                if extension == "skip" || extension == expected_extension {
+                    continue;
+                }
+            }
 
             f(input_path, expected_path)
         }
@@ -85,6 +88,10 @@ mod tests {
                 let expected = read_or_create(expected, &input);
 
                 if input != expected {
+                    if false {
+                        std::fs::rename(&input_path, &with_extension(&input_path, "skip")).unwrap();
+                    }
+
                     errors.push(input_path);
                 }
             },
