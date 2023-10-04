@@ -3,7 +3,6 @@ mod plugins;
 
 pub fn format_code(input: &str) -> String {
     let formatter = core::FormatterBuilder::default()
-        .plugin::<plugins::Ident>()
         // Adding spaces after "(" and before ")"
         .plugin::<plugins::Parentheses>()
         // Adding spaces after "[" and before "]"
@@ -21,22 +20,7 @@ pub fn format_code(input: &str) -> String {
 mod tests {
     use std::path::PathBuf;
 
-    // use crate::highlight::Markdown;
-
-    #[test]
-    fn it_works() {
-        let input = r#"
-fn main(){
-let x=[1,2,3];
-if(x>5){
-println!("x is greater than 5");
-}
-}
-"#;
-
-        let output = super::format_code(input);
-        println!("{}", output);
-    }
+    use crate::format_code;
 
     fn update_expect() -> bool {
         std::env::var("UPDATE_EXPECT").is_ok()
@@ -74,7 +58,7 @@ println!("x is greater than 5");
         }
     }
 
-    fn traverse(root: &str, expected_ext: &str, f: impl Fn(PathBuf, PathBuf)) {
+    fn traverse(root: &str, expected_ext: &str, mut f: impl FnMut(PathBuf, PathBuf)) {
         for entry in std::fs::read_dir(root).unwrap() {
             let input_path = entry.unwrap().path();
             let expected_path = with_extension(&input_path, expected_ext);
@@ -87,30 +71,32 @@ println!("x is greater than 5");
         }
     }
 
-    // #[test]
-    // fn highlight() {
-    //     traverse("tests/assets/lex", "md", |input, expected| {
-    //         let input = crate::highlight::highlight(
-    //             &std::fs::read_to_string(input).unwrap(),
-    //             Markdown.into(),
-    //         );
-
-    //         let expected = read_or_create(expected, &input);
-
-    //         assert_eq!(input, expected);
-    //     });
-    // }
-
     #[test]
     fn formatter() {
-        traverse("tests/assets/formatter", "expected", |input, expected| {
-            let input = std::fs::read_to_string(input).unwrap();
-            let input = crate::format_code(&input);
+        let mut errors = Vec::new();
 
-            let expected = read_or_create(expected, &input);
+        traverse(
+            "tests/assets/formatter",
+            "expected",
+            |input_path, expected| {
+                let input = std::fs::read_to_string(&input_path).unwrap();
+                let input = crate::format_code(&input);
 
-            assert_eq!(input, expected);
-        });
+                let expected = read_or_create(expected, &input);
+
+                if input != expected {
+                    errors.push(input_path);
+                }
+            },
+        );
+
+        for error in &errors {
+            println!("failed {}", error.display());
+        }
+
+        if !errors.is_empty() {
+            std::panic::resume_unwind(Box::new(42));
+        }
     }
 
     #[test]
@@ -126,5 +112,43 @@ println!("x is greater than 5");
         let path = PathBuf::from("file");
         let expected = PathBuf::from("file.expected");
         assert_eq!(with_extension(&path, "expected"), expected);
+    }
+
+    #[test]
+    fn test_case_1() {
+        assert_eq!("f1( ){}", format_code("f1( ){}"));
+    }
+
+    #[test]
+    fn test_case_2() {
+        assert_eq!("f1( ){}", format_code("f1( ){}"));
+    }
+
+    #[test]
+    fn test_case_3() {
+        assert_eq!("f1(){}", format_code("f1(){}"));
+    }
+
+    #[test]
+    fn test_case_4() {
+        assert_eq!("let x : int = 3", format_code("let x:int=3"));
+    }
+
+    #[test]
+    fn test_case_5() {
+        assert_eq!(
+            "f1( x ) , f2( y ) , f3()",
+            format_code("f1( x ),f2(y) , f3()")
+        );
+    }
+
+    #[test]
+    fn test_case_6() {
+        assert_eq!("[ 1, b, 3 ]", format_code("[1,b,3]"));
+    }
+
+    #[test]
+    fn test_case_7() {
+        assert_eq!("{ a : 1 , b : 2 }", format_code("{a:1,b:2}"));
     }
 }
