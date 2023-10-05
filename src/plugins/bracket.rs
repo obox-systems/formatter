@@ -21,7 +21,8 @@ impl crate::core::Plugin for Bracket {
                     return "[ ]".to_owned();
                 } else {
                     // Split the inner content by comma, trim each element, then join them back with comma and space
-                    let formatted_inner: String = inner_trimmed.split(',')
+                    let formatted_inner: String = inner_trimmed
+                        .split(',')
                         .map(|s| s.trim())
                         .collect::<Vec<&str>>()
                         .join(", ");

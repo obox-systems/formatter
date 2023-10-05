@@ -66,24 +66,24 @@ impl Formatter {
     pub(crate) fn format(&self, input: &str) -> String {
         let formatted = self
             .regex
-            .replace_all(input, |caps: &fancy_regex::Captures| {
+            .replace_all(input, |captures: &fancy_regex::Captures| {
                 for (group, group_index) in self.callback_list.iter().zip(1usize..) {
-                    if let Some(n) = caps.get(group_index) {
-                        let done = (group)(n.as_str());
+                    if let Some(n) = captures.get(group_index) {
+                        let replaced = (group)(n.as_str());
 
                         #[allow(clippy::overly_complex_bool_expr)]
                         if false && cfg!(debug_assertions) {
                             println!(
-                                "{} = {:?} as {done:?}",
+                                "{} = {:?} as {replaced:?}",
                                 &self.names[group_index - 1],
                                 n.as_str()
                             );
                         }
-                        return done;
+                        return replaced;
                     }
                 }
 
-                caps[0].to_string()
+                captures[0].to_string()
             });
 
         formatted.to_string()
